@@ -1,0 +1,113 @@
+{
+  "categories": ["Game Art", "ArchViz", "FX & Motion"],
+  "projects": [
+    {
+      "id": "vintage-cafe",
+      "title": "Vintage Cafe",
+      "category": "Game Art",
+      "tools": ["Unreal Engine 5"],
+      "year": "",
+      "description": "A lived-in vintage diner built and lit in Unreal Engine 5 — neon signage, patinated surfaces and warm practical lighting carrying the mood across the room.",
+      "folder": "assets/images/3D Art/Vintage Cafe (UE5)",
+      "cover": "1.png",
+      "images": ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png", "7.png", "8.png"],
+      "video": ""
+    },
+    {
+      "id": "beyond-human",
+      "title": "Beyond Human",
+      "category": "Game Art",
+      "tools": ["Maya", "V-Ray"],
+      "year": "",
+      "description": "A stylised cliff-side settlement modelled in Maya and rendered with V-Ray — bold silhouettes, layered structures and atmospheric depth.",
+      "folder": "assets/images/3D Art/Beyond Human (MAYA + V-Ray)",
+      "cover": "1.png",
+      "images": ["1.png", "2.png"],
+      "video": ""
+    },
+    {
+      "id": "flood-neighborhood",
+      "title": "Flood Neighborhood",
+      "category": "Game Art",
+      "tools": ["Unreal Engine 5"],
+      "year": "",
+      "description": "A submerged residential street staged in Unreal Engine 5, exploring reflections, scale and the eerie calm of a flooded environment.",
+      "folder": "assets/images/3D Art/Flood Neighborhood (UE5)",
+      "cover": "1.png",
+      "images": ["1.png", "2.png", "3.png"],
+      "video": ""
+    },
+    {
+      "id": "victorian-bedroom",
+      "title": "Victorian Bedroom",
+      "category": "Game Art",
+      "tools": ["Unreal Engine 5"],
+      "year": "",
+      "description": "An ornate Victorian interior in Unreal Engine 5 — period furnishings, rich materials and soft window light dressing the space.",
+      "folder": "assets/images/3D Art/Victorian bedroom (UE5)",
+      "cover": "1.png",
+      "images": ["1.png", "2.png", "3.png", "4.png"],
+      "video": ""
+    },
+    {
+      "id": "post-apocalyptic-axe",
+      "title": "Low-Poly Post-Apocalyptic Axe",
+      "category": "Game Art",
+      "tools": ["Maya", "Marmoset Toolbag"],
+      "year": "",
+      "description": "A game-ready post-apocalyptic axe — low-poly modelled in Maya, textured and presented in Marmoset Toolbag with hand-worn detail.",
+      "folder": "assets/images/3D Art/Low Poly post apocalyptic Axe (MAYA + Marmoset Toolbox)",
+      "cover": "1.png",
+      "images": ["1.png", "2.png", "3.png"],
+      "video": ""
+    },
+    {
+      "id": "san-francisco-cafe",
+      "title": "San Francisco Cafe",
+      "category": "ArchViz",
+      "tools": ["3ds Max", "V-Ray"],
+      "year": "",
+      "description": "Architectural visualization of a San Francisco cafe interior — 3ds Max and V-Ray, with photoreal materials and balanced daylight.",
+      "folder": "assets/images/ArchViz/San Francisco Cafe (3DS Max + V-Ray)",
+      "cover": "1.png",
+      "images": ["1.png", "2.png"],
+      "video": ""
+    },
+    {
+      "id": "rustic-italian-kitchen",
+      "title": "Rustic Italian Kitchen",
+      "category": "ArchViz",
+      "tools": ["3ds Max", "V-Ray"],
+      "year": "",
+      "description": "A warm rustic Italian kitchen design — 3ds Max and V-Ray, featuring natural stone, aged timber and inviting interior lighting.",
+      "folder": "assets/images/ArchViz/Rustic Italian Kitchen Design (3DS Max + V-Ray)",
+      "cover": "1.png",
+      "images": ["1.png", "2.png", "3.png", "4.png"],
+      "video": ""
+    },
+    {
+      "id": "transitional-bathroom",
+      "title": "Transitional Bathroom",
+      "category": "ArchViz",
+      "tools": ["3ds Max", "V-Ray"],
+      "year": "",
+      "description": "A transitional bathroom interior visualized in 3ds Max and V-Ray — clean lines, refined fixtures and soft, even lighting.",
+      "folder": "assets/images/ArchViz/Transitional Bathroom Design (3DS Max + V-Ray)",
+      "cover": "1.png",
+      "images": ["1.png", "2.png", "3.png"],
+      "video": ""
+    },
+    {
+      "id": "5250-3rd-street",
+      "title": "5250 3rd Street",
+      "category": "ArchViz",
+      "tools": ["3ds Max", "V-Ray"],
+      "year": "",
+      "description": "Exterior architectural visualization of 5250 3rd Street — 3ds Max and V-Ray, with accurate massing, materials and environment lighting.",
+      "folder": "assets/images/ArchViz/5250 3rd Street (3DS Max + V-Ray)",
+      "cover": "1.png",
+      "images": ["1.png", "2.png"],
+      "video": ""
+    }
+  ]
+}

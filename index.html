@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rudy Sen — 3D Visual Designer</title>
+<meta name="description" content="A 3D Visual Designer with 10+ years building high-end game environments and architectural visualization — Maya, 3ds Max, Unreal Engine & V-Ray.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600&family=Archivo+Expanded:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;overflow-x:hidden;font-size:130%}
+  body{background:#0a0b0e;color:#f4f3ef;font-family:'Archivo',system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+  ::selection{background:#f4f3ef;color:#0a0b0e}
+  img{display:block;max-width:100%}
+  a{text-decoration:none}
+  button{background:none;border:none;font-family:inherit}
+  @keyframes rsPulse{0%,100%{opacity:1}50%{opacity:.3}}
+  @keyframes flowA{0%{transform:translate(-12%,-8%) scale(1.15)}33%{transform:translate(14%,10%) scale(1.4)}66%{transform:translate(6%,-14%) scale(1.1)}100%{transform:translate(-12%,-8%) scale(1.15)}}
+  @keyframes flowB{0%{transform:translate(18%,12%) scale(1.3)}50%{transform:translate(-16%,-6%) scale(1.55)}100%{transform:translate(18%,12%) scale(1.3)}}
+  @keyframes flowC{0%{transform:translate(-8%,16%) scale(1.2)}50%{transform:translate(12%,-12%) scale(1.45)}100%{transform:translate(-8%,16%) scale(1.2)}}
+  @keyframes flowD{0%{transform:translate(10%,-16%) scale(1.5)}50%{transform:translate(-14%,14%) scale(1.2)}100%{transform:translate(10%,-16%) scale(1.5)}}
+  @media(prefers-reduced-motion:reduce){[data-blob]{animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- FIXED BACKGROUND: warm flow + frosted-chrome 3D objects -->
+<div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none">
+  <div style="position:absolute;inset:-5%;filter:blur(11px)">
+    <div data-blob style="position:absolute;width:70%;height:70%;left:-8%;top:-8%;border-radius:50%;background:radial-gradient(circle,#54565f 0%,transparent 62%);animation:flowA 10s ease-in-out infinite"></div>
+    <div data-blob style="position:absolute;width:75%;height:75%;left:18%;bottom:-12%;border-radius:50%;background:radial-gradient(circle,#3a3b42 0%,transparent 60%);animation:flowC 13s ease-in-out infinite"></div>
+    <div data-blob style="position:absolute;width:60%;height:60%;right:-6%;top:-4%;border-radius:50%;background:radial-gradient(circle,#c2674a 0%,transparent 60%);opacity:.4;animation:flowB 11s ease-in-out infinite"></div>
+    <div data-blob style="position:absolute;width:52%;height:52%;left:28%;top:36%;border-radius:50%;background:radial-gradient(circle,#d98a4a 0%,transparent 58%);opacity:.3;animation:flowD 9s ease-in-out infinite"></div>
+    <div data-blob style="position:absolute;width:58%;height:58%;left:-6%;bottom:-6%;border-radius:50%;background:radial-gradient(circle,#5b4a8a 0%,transparent 60%);opacity:.36;animation:flowC 12s ease-in-out infinite"></div>
+  </div>
+  <canvas id="chrome3d" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
+</div>
+
+<!-- NAV -->
+<nav id="nav" style="position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px clamp(16px,4vw,48px);transition:padding .4s,background .4s,border-color .4s,transform .45s cubic-bezier(.19,1,.22,1);border-bottom:1px solid transparent">
+  <a href="#top" data-nav style="display:flex;align-items:baseline;gap:11px">
+    <span style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:700;font-size:1.02rem;letter-spacing:-.01em;color:#f4f3ef">RUDY<span style="color:#ffffff">SEN</span></span>
+  </a>
+  <div style="display:flex;align-items:center;gap:clamp(14px,2.4vw,32px)">
+    <a href="#work" data-nav data-navlink style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:#f4f3ef;opacity:.6;transition:opacity .3s">Work</a>
+    <a href="#about" data-nav data-navlink style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:#f4f3ef;opacity:.6;transition:opacity .3s">About</a>
+    <a href="#experience" data-nav data-navlink style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:#f4f3ef;opacity:.6;transition:opacity .3s">Career</a>
+    <a href="#contact" data-nav data-navlink style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:#f4f3ef;opacity:.6;transition:opacity .3s">Contact</a>
+    <a href="assets/Resume/Rudhra_Senapati_(Rudy Sen)-Resume.pdf" download data-mag style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.13em;text-transform:uppercase;color:#16171b;background:linear-gradient(180deg,#f6f6f4,#d7d8dc);border:1px solid rgba(255,255,255,.6);padding:10px 18px;border-radius:100px;box-shadow:0 10px 24px -12px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.8);transition:transform .35s cubic-bezier(.19,1,.22,1)">Resume</a>
+  </div>
+</nav>
+
+<main id="top" style="position:relative;z-index:2">
+
+  <!-- HERO -->
+  <section style="min-height:100svh;display:flex;align-items:center;padding:clamp(80px,11vh,120px) clamp(20px,4vw,52px) clamp(40px,6vh,70px)">
+    <div style="max-width:1400px;margin:0 auto;width:100%">
+      <div data-tilt style="perspective:1700px">
+        <div data-tilt-inner style="position:relative;border-radius:28px;overflow:hidden;background:rgba(16,17,21,.36);backdrop-filter:blur(40px) saturate(160%);-webkit-backdrop-filter:blur(40px) saturate(160%);border:1px solid rgba(255,255,255,.15);box-shadow:0 60px 140px -50px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 80px rgba(255,255,255,.03);transform-style:preserve-3d;will-change:transform;transition:transform .5s cubic-bezier(.19,1,.22,1)">
+          <div style="position:relative;padding:clamp(48px,7vw,96px) clamp(40px,6vw,88px)">
+            <div style="display:flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:#ffffff;margin-bottom:32px;transform:translateZ(40px)"><i style="width:7px;height:7px;border-radius:50%;background:#2a9d5a;box-shadow:0 0 10px #2a9d5a;animation:rsPulse 2s infinite;display:inline-block"></i>&nbsp;Available for work · Los Angeles</div>
+            <div style="transform:translateZ(60px)">
+              <div style="font-family:'Space Mono',monospace;font-size:clamp(13px,1.1vw,16px);letter-spacing:.32em;text-transform:uppercase;color:#f4f3ef;opacity:.7;margin-bottom:20px">3D Visual Designer</div>
+              <h1 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:700;font-size:clamp(4.2rem,10vw,9rem);line-height:.88;letter-spacing:-.05em;color:#f4f3ef">Rudy<br>Sen.</h1>
+            </div>
+            <p style="max-width:560px;margin-top:36px;color:#f4f3ef;font-size:1.08rem;line-height:1.75;font-weight:300;transform:translateZ(30px)">3D Visual Designer with 10+ years of experience creating high-quality 3D assets for games, product visualization, and architectural rendering. Skilled in modeling, texturing, lighting, rendering, and scene optimization. Strong background in realistic rendering, procedural workflows, and cross-team collaboration.</p>
+            <div style="margin-top:40px;display:flex;gap:14px;flex-wrap:wrap;transform:translateZ(50px)">
+              <a href="#work" data-nav data-mag style="font-family:'Space Mono',monospace;font-size:16px;letter-spacing:.12em;text-transform:uppercase;color:#16171b;background:linear-gradient(180deg,#f6f6f4,#d7d8dc);border:1px solid rgba(255,255,255,.6);padding:18px 32px;border-radius:100px;box-shadow:0 16px 36px -16px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.8);cursor:pointer">View the work →</a>
+              <a href="assets/Resume/Rudhra_Senapati_(Rudy Sen)-Resume.pdf" download data-mag style="font-family:'Space Mono',monospace;font-size:16px;letter-spacing:.12em;text-transform:uppercase;color:#f4f3ef;background:rgba(255,255,255,.09);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.24);padding:18px 32px;border-radius:100px;cursor:pointer">Download Resume</a>
+            </div>
+            <div style="margin-top:64px;display:flex;gap:clamp(32px,5vw,72px);flex-wrap:wrap;transform:translateZ(20px);padding-top:40px;border-top:1px solid rgba(255,255,255,.1)">
+              <div><div style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(2rem,3.2vw,2.8rem);line-height:1;color:#f4f3ef">10+</div><div style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#f4f3ef;opacity:.7;margin-top:10px">Years</div></div>
+              <div><div style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(2rem,3.2vw,2.8rem);line-height:1;color:#f4f3ef">1000+</div><div style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#f4f3ef;opacity:.7;margin-top:10px">Scenes</div></div>
+              <div><div style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(2rem,3.2vw,2.8rem);line-height:1;color:#f4f3ef">Apple</div><div style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#f4f3ef;opacity:.7;margin-top:10px">Past studio</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" style="padding:clamp(60px,9vh,120px) clamp(20px,5vw,80px)">
+    <div data-reveal style="opacity:0;transform:translateY(42px);filter:blur(6px);transition:opacity 1s cubic-bezier(.19,1,.22,1),transform 1s cubic-bezier(.19,1,.22,1),filter 1s ease;margin-bottom:clamp(34px,6vh,64px);display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <div>
+        <div style="display:flex;align-items:center;gap:13px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.26em;text-transform:uppercase;color:#ffffff;margin-bottom:18px"><span style="width:26px;height:1px;background:#ffffff"></span>Selected Work</div>
+        <h2 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(2.3rem,5vw,4rem);line-height:1;letter-spacing:-.03em;color:#f4f3ef">Built to be<br>walked through.</h2>
+      </div>
+      <p style="max-width:340px;color:#f4f3ef;opacity:.85;font-size:1rem;line-height:1.6;font-weight:300">Environments, props and architectural visualization — modelled, textured, lit and rendered to be believed.</p>
+    </div>
+    <div id="work-grid"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" style="padding:clamp(60px,9vh,120px) clamp(20px,5vw,80px)">
+    <div data-reveal style="opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity 1s cubic-bezier(.19,1,.22,1),transform 1s cubic-bezier(.19,1,.22,1),filter 1s ease;border-radius:24px;overflow:hidden;background:rgba(16,17,21,.38);backdrop-filter:blur(34px) saturate(150%);-webkit-backdrop-filter:blur(34px) saturate(150%);border:1px solid rgba(255,255,255,.13);box-shadow:0 40px 100px -40px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.14);padding:clamp(34px,5vw,72px)">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(36px,5vw,80px);align-items:start">
+        <div>
+          <div style="display:flex;align-items:center;gap:13px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.26em;text-transform:uppercase;color:#ffffff;margin-bottom:20px"><span style="width:26px;height:1px;background:#ffffff"></span>About</div>
+          <h2 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.02;letter-spacing:-.03em;margin-bottom:30px;color:#f4f3ef">A human eye,<br>a technical hand.</h2>
+          <p style="color:#f4f3ef;opacity:.9;font-size:1.06rem;line-height:1.7;font-weight:300;margin-bottom:18px;max-width:58ch"><b style="font-weight:500;opacity:1">3D Visual Designer with 10+ years</b> of experience creating high-quality 3D assets for games, product visualization, and architectural rendering. Skilled in modeling, texturing, lighting, rendering, and scene optimization.</p>
+          <p style="color:#f4f3ef;opacity:.9;font-size:1.06rem;line-height:1.7;font-weight:300;max-width:58ch">Strong background in <b style="font-weight:500">realistic rendering, procedural workflows, and cross-team collaboration</b> — including production and R&amp;D work at <b style="font-weight:500">Apple</b>, where I automated scene-building pipelines and managed QA across 1000+ 3D projects.</p>
+        </div>
+        <div style="background:rgba(255,255,255,.05);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:32px">
+          <h4 style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:#ffffff;opacity:.8;margin-bottom:20px">Core Stack</h4>
+          <div id="stack-chips" style="display:flex;flex-wrap:wrap;gap:9px"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" style="padding:clamp(60px,9vh,120px) clamp(20px,5vw,80px)">
+    <div style="max-width:1100px;margin:0 auto">
+      <div data-reveal style="opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity 1s cubic-bezier(.19,1,.22,1),transform 1s cubic-bezier(.19,1,.22,1),filter 1s ease;margin-bottom:clamp(34px,5vh,56px)">
+        <div style="display:flex;align-items:center;gap:13px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.26em;text-transform:uppercase;color:#ffffff;margin-bottom:18px"><span style="width:26px;height:1px;background:#ffffff"></span>Career</div>
+        <h2 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(2rem,4.2vw,3.4rem);line-height:1;letter-spacing:-.03em;color:#f4f3ef">Experience</h2>
+      </div>
+      <div data-reveal style="opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity 1s cubic-bezier(.19,1,.22,1),transform 1s cubic-bezier(.19,1,.22,1),filter 1s ease;border-radius:22px;background:rgba(16,17,21,.36);backdrop-filter:blur(32px) saturate(150%);-webkit-backdrop-filter:blur(32px) saturate(150%);border:1px solid rgba(255,255,255,.13);box-shadow:0 40px 100px -40px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.14);padding:clamp(30px,4vw,52px)">
+        <div id="jobs-timeline" style="border-left:1px solid rgba(255,255,255,.2);padding-left:clamp(22px,3vw,40px)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION + AWARDS -->
+  <section style="padding:clamp(60px,9vh,120px) clamp(20px,5vw,80px)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(20px,2.5vw,32px)">
+      <div data-reveal style="opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity 1s cubic-bezier(.19,1,.22,1),transform 1s cubic-bezier(.19,1,.22,1),filter 1s ease;border-radius:22px;background:rgba(16,17,21,.36);backdrop-filter:blur(32px) saturate(150%);-webkit-backdrop-filter:blur(32px) saturate(150%);border:1px solid rgba(255,255,255,.13);box-shadow:0 40px 100px -40px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.14);padding:clamp(30px,4vw,48px)">
+        <div style="display:flex;align-items:center;gap:13px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.26em;text-transform:uppercase;color:#ffffff;margin-bottom:18px"><span style="width:26px;height:1px;background:#ffffff"></span>Education</div>
+        <h2 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(1.6rem,3.2vw,2.4rem);line-height:1;letter-spacing:-.02em;color:#f4f3ef;margin-bottom:28px">Training</h2>
+        <div id="education-list"></div>
+      </div>
+      <div data-reveal style="opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity 1s cubic-bezier(.19,1,.22,1) .1s,transform 1s cubic-bezier(.19,1,.22,1) .1s,filter 1s ease .1s;border-radius:22px;background:rgba(16,17,21,.36);backdrop-filter:blur(32px) saturate(150%);-webkit-backdrop-filter:blur(32px) saturate(150%);border:1px solid rgba(255,255,255,.13);box-shadow:0 40px 100px -40px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.14);padding:clamp(30px,4vw,48px)">
+        <div style="display:flex;align-items:center;gap:13px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.26em;text-transform:uppercase;color:#ffffff;margin-bottom:18px"><span style="width:26px;height:1px;background:#ffffff"></span>Recognition</div>
+        <h2 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(1.6rem,3.2vw,2.4rem);line-height:1;letter-spacing:-.02em;color:#f4f3ef;margin-bottom:28px">Awards</h2>
+        <div id="awards-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="padding:clamp(70px,11vh,150px) clamp(20px,5vw,80px)">
+    <div data-tilt data-reveal style="opacity:0;transform:translateY(42px);filter:blur(6px);transition:opacity 1s cubic-bezier(.19,1,.22,1),transform 1s cubic-bezier(.19,1,.22,1),filter 1s ease;max-width:1200px;margin:0 auto;perspective:1700px">
+      <div data-tilt-inner style="text-align:center;border-radius:26px;overflow:hidden;background:rgba(16,17,21,.34);backdrop-filter:blur(36px) saturate(150%);-webkit-backdrop-filter:blur(36px) saturate(150%);border:1px solid rgba(255,255,255,.14);box-shadow:0 50px 120px -40px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.16);transform-style:preserve-3d;will-change:transform;transition:transform .5s cubic-bezier(.19,1,.22,1);padding:clamp(50px,9vw,110px) clamp(24px,4vw,56px)">
+        <div style="display:inline-flex;align-items:center;gap:13px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.26em;text-transform:uppercase;color:#ffffff;margin-bottom:24px;transform:translateZ(30px)"><span style="width:26px;height:1px;background:#ffffff"></span>Contact</div>
+        <h2 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(2.4rem,6.5vw,5.4rem);line-height:.98;letter-spacing:-.035em;color:#f4f3ef;transform:translateZ(55px)">Let's build<br>something real.</h2>
+        <p style="color:#f4f3ef;opacity:.85;max-width:460px;margin:24px auto 0;font-weight:300;font-size:1.05rem;line-height:1.6;transform:translateZ(25px)">Available for freelance projects, collaborations and full-time roles.</p>
+        <div style="margin-top:40px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;transform:translateZ(45px)">
+          <a href="mailto:rudhraingame@gmail.com" data-mag style="font-family:'Space Mono',monospace;font-size:15px;letter-spacing:.1em;color:#16171b;background:linear-gradient(180deg,#f6f6f4,#d7d8dc);border:1px solid rgba(255,255,255,.6);padding:16px 28px;border-radius:100px;box-shadow:0 16px 36px -16px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.8)">rudhraingame@gmail.com</a>
+          <a href="assets/Resume/Rudhra_Senapati_(Rudy Sen)-Resume.pdf" download data-mag style="font-family:'Space Mono',monospace;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:#f4f3ef;background:rgba(255,255,255,.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.22);padding:16px 28px;border-radius:100px">Download Resume</a>
+          <a href="https://artstation.com/rudhrapratap-94" target="_blank" rel="noopener" data-mag style="font-family:'Space Mono',monospace;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:#f4f3ef;background:rgba(255,255,255,.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.22);padding:16px 28px;border-radius:100px">ArtStation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top:1px solid rgba(255,255,255,.1);padding:28px clamp(20px,5vw,80px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.13em;text-transform:uppercase;color:#f4f3ef;opacity:.65">
+    <span>Rudy Sen — 3D Visual Designer</span>
+    <span id="footer-year"></span>
+    <a href="#top" data-nav style="color:#f4f3ef">Back to top ↑</a>
+  </footer>
+</main>
+
+<!-- CASE STUDY OVERLAY -->
+<div id="cs" role="dialog" aria-modal="true" style="position:fixed;inset:0;z-index:4000;background:rgba(10,11,14,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow-y:auto;overflow-x:hidden;opacity:0;visibility:hidden;transition:opacity .5s cubic-bezier(.19,1,.22,1),visibility .5s">
+  <div style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(16px,4vw,48px);background:rgba(14,15,19,.6);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border-bottom:1px solid rgba(255,255,255,.1)">
+    <span style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#f4f3ef;opacity:.8">Rudy Sen — Case Study</span>
+    <button id="cs-close" data-mag style="display:flex;align-items:center;gap:9px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.13em;text-transform:uppercase;color:#f4f3ef;background:rgba(255,255,255,.08);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.2);padding:10px 18px;border-radius:100px;cursor:pointer">Close ✕</button>
+  </div>
+  <div style="max-width:1400px;margin:0 auto;padding:clamp(44px,9vh,96px) clamp(16px,4vw,48px) clamp(24px,5vh,48px)">
+    <div id="cs-cat" style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.26em;text-transform:uppercase;color:#ffffff;margin-bottom:18px"></div>
+    <h2 id="cs-title" style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(2.4rem,7vw,5.5rem);line-height:.98;letter-spacing:-.035em;color:#f4f3ef"></h2>
+    <p id="cs-desc" style="color:#f4f3ef;opacity:.85;max-width:640px;margin-top:22px;font-size:1.1rem;font-weight:300;line-height:1.65"></p>
+    <div id="cs-tools" style="margin-top:22px;display:flex;flex-wrap:wrap;gap:9px"></div>
+  </div>
+  <div id="cs-shots" style="max-width:1400px;margin:0 auto;padding:0 clamp(16px,4vw,48px) clamp(44px,9vh,96px);display:flex;flex-direction:column;gap:clamp(14px,2vw,24px)"></div>
+  <div id="cs-nav" style="max-width:1400px;margin:0 auto;padding:36px clamp(16px,4vw,48px) clamp(64px,12vh,110px);display:flex;justify-content:space-between;gap:16px;border-top:1px solid rgba(255,255,255,.1)"></div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lb" role="dialog" aria-modal="true" style="position:fixed;inset:0;z-index:4500;background:rgba(6,7,9,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:clamp(16px,4vw,60px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s">
+  <button id="lb-close" data-mag aria-label="Close" style="position:absolute;top:22px;right:26px;width:46px;height:46px;border:1px solid rgba(255,255,255,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);cursor:pointer">✕</button>
+  <button id="lb-prev" data-mag aria-label="Previous" style="position:absolute;left:24px;top:50%;transform:translateY(-50%);width:52px;height:52px;border:1px solid rgba(255,255,255,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);cursor:pointer">‹</button>
+  <img id="lb-img" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" style="max-width:100%;max-height:88vh;object-fit:contain;border-radius:6px;box-shadow:0 40px 90px rgba(0,0,0,.6)">
+  <button id="lb-next" data-mag aria-label="Next" style="position:absolute;right:24px;top:50%;transform:translateY(-50%);width:52px;height:52px;border:1px solid rgba(255,255,255,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);cursor:pointer">›</button>
+  <div id="lb-ct" style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.2em;color:rgba(255,255,255,.7)"></div>
+</div>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(pointer:fine)').matches;
+
+  // ---- DATA ----
+  const FOLDER_MAP = {
+    'vintage-cafe':           'assets/images/3D Art/Vintage Cafe (UE5)',
+    'beyond-human':           'assets/images/3D Art/Beyond Human (MAYA + V-Ray)',
+    'flood':                  'assets/images/3D Art/Flood Neighborhood (UE5)',
+    'victorian':              'assets/images/3D Art/Victorian bedroom (UE5)',
+    'axe':                    'assets/images/3D Art/Low Poly post apocalyptic Axe (MAYA + Marmoset Toolbox)',
+    'sf-cafe':                'assets/images/ArchViz/San Francisco Cafe (3DS Max + V-Ray)',
+    'kitchen':                'assets/images/ArchViz/Rustic Italian Kitchen Design (3DS Max + V-Ray)',
+    'bathroom':               'assets/images/ArchViz/Transitional Bathroom Design (3DS Max + V-Ray)',
+    '5250':                   'assets/images/ArchViz/5250 3rd Street (3DS Max + V-Ray)'
+  };
+
+  const PROJECTS = [
+    {id:'vintage-cafe',           title:'Vintage Cafe',                    cat:'Game Art', tools:['Unreal Engine 5'],          folder:'vintage-cafe', cover:1, images:[1,2,3,4,5,6,7,8], desc:'A lived-in vintage diner built and lit in Unreal Engine 5 — neon signage, patinated surfaces and warm practical lighting carrying the mood across the room.'},
+    {id:'beyond-human',           title:'Beyond Human',                    cat:'Game Art', tools:['Maya','V-Ray'],             folder:'beyond-human', cover:1, images:[1,2],              desc:'A stylised cliff-side settlement modelled in Maya and rendered with V-Ray — bold silhouettes, layered structures and atmospheric depth.'},
+    {id:'flood-neighborhood',     title:'Flood Neighborhood',              cat:'Game Art', tools:['Unreal Engine 5'],          folder:'flood',        cover:1, images:[1,2,3],            desc:'A submerged residential street staged in Unreal Engine 5, exploring reflections, scale and the eerie calm of a flooded environment.'},
+    {id:'victorian-bedroom',      title:'Victorian Bedroom',               cat:'Game Art', tools:['Unreal Engine 5'],          folder:'victorian',    cover:1, images:[1,2,3,4],          desc:'An ornate Victorian interior in Unreal Engine 5 — period furnishings, rich materials and soft window light dressing the space.'},
+    {id:'post-apocalyptic-axe',   title:'Low-Poly Post-Apocalyptic Axe',  cat:'Game Art', tools:['Maya','Marmoset Toolbag'],  folder:'axe',          cover:1, images:[1,2,3],            desc:'A game-ready post-apocalyptic axe — low-poly modelled in Maya, textured and presented in Marmoset Toolbag with hand-worn detail.'},
+    {id:'san-francisco-cafe',     title:'San Francisco Cafe',              cat:'ArchViz',  tools:['3ds Max','V-Ray'],          folder:'sf-cafe',      cover:1, images:[1,2],              desc:'Architectural visualization of a San Francisco cafe interior — 3ds Max and V-Ray, with photoreal materials and balanced daylight.'},
+    {id:'rustic-italian-kitchen', title:'Rustic Italian Kitchen',          cat:'ArchViz',  tools:['3ds Max','V-Ray'],          folder:'kitchen',      cover:1, images:[1,2,3,4],          desc:'A warm rustic Italian kitchen design — 3ds Max and V-Ray, featuring natural stone, aged timber and inviting interior lighting.'},
+    {id:'transitional-bathroom',  title:'Transitional Bathroom',           cat:'ArchViz',  tools:['3ds Max','V-Ray'],          folder:'bathroom',     cover:1, images:[1,2,3],            desc:'A transitional bathroom interior visualized in 3ds Max and V-Ray — clean lines, refined fixtures and soft, even lighting.'},
+    {id:'5250-3rd-street',        title:'5250 3rd Street',                 cat:'ArchViz',  tools:['3ds Max','V-Ray'],          folder:'5250',         cover:1, images:[1,2],              desc:'Exterior architectural visualization of 5250 3rd Street — 3ds Max and V-Ray, with accurate massing, materials and environment lighting.'}
+  ];
+  const CATS   = ['Game Art','ArchViz','FX & Motion'];
+  const STACK  = ['3ds Max','Maya','Blender','Substance Painter','Unreal Engine','Unity','V-Ray','Photoshop','Real-Time Rendering','Asset Optimization','Environment Design','Hard-Surface Modeling','PBR Materials','Lighting & Composition'];
+  const JOBS   = [
+    {role:'3D Visual Designer',              when:'JUL 2025 — PRESENT',    org:'Pixxel18Studios · Los Angeles', dot:'#2a9d5a',  points:['Create realistic, high-quality 3D surface models, textures and environments.','Deliver photoreal renderings and animations for commercial and industrial visualization.','Collaborate with art directors and clients to maintain consistency and hit deadlines.']},
+    {role:'3D Generalist / Production Manager IV',   when:'JUL 2024 — JUN 2025', org:'Apple Inc. · Cupertino',        dot:'#cfd1d7', points:['Automated scene-building and camera setup with Python, cutting production time ~60%.','Managed QA across 1000+ 3D projects for visual consistency and performance.','Created 1000+ realistic scenes across varied themes.']},
+    {role:'3D Generalist / R&D Outsourcing Artist',  when:'JAN 2022 — JAN 2024', org:'Apple Inc. · Cupertino',        dot:'#cfd1d7', points:['Created realistic scenes and optimized assets for internal projects and vendor teams.','Developed style guides and demo scenes to maintain quality across vendors.','Reviewed outsourced artwork and gave detailed feedback to external teams.']}
+  ];
+  const EDUCATION = [
+    {school:'Gnomon School of VFX',                detail:'3D Environment Creation, Houdini, Animation for VFX, Digital Filmmaking · 2024'},
+    {school:'ELTVR',                               detail:'Technical Artist for Games · 2024'},
+    {school:'UCLA Extension',                      detail:'Associate Degree, Computer Graphics · 2021'},
+    {school:'Vancouver Institute of Media Arts',   detail:'Associate Degree, Game Art & Design · 2019'},
+    {school:'Maya Academy of Advanced Cinematics', detail:'BA in 3D Design · 2014'}
+  ];
+  const AWARDS = [
+    {title:'Gold Award',    detail:'100 Hours Time-based Animation Competition, MAAC · 2015'},
+    {title:'Gold Award',    detail:'11th Annual International 3D Short Film Awards, MAAC · 2014'},
+    {title:'Certification', detail:'Adobe Visual Communication with Photoshop · 2012'}
+  ];
+
+  function thumb(folder, n){ return FOLDER_MAP[folder] + '/' + n + '.thumb.webp'; }
+  function full(folder, n){  return FOLDER_MAP[folder] + '/' + n + '.webp'; }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+  // ---- FOOTER YEAR ----
+  document.getElementById('footer-year').textContent = '© ' + new Date().getFullYear() + ' Rudhra Senapati';
+
+  // ---- RENDER WORK GRID ----
+  const workGrid = document.getElementById('work-grid');
+  let gi = 0;
+  CATS.forEach((catName, ci) => {
+    const list = PROJECTS.filter(p => p.cat === catName);
+    const countLabel = list.length
+      ? String(list.length).padStart(2,'0') + ' project' + (list.length===1?'':'s')
+      : 'Coming soon';
+
+    const catDiv = document.createElement('div');
+    catDiv.style.marginBottom = 'clamp(44px,7vh,84px)';
+    catDiv.innerHTML = `
+      <div data-reveal style="opacity:0;transform:translateY(36px);filter:blur(6px);transition:opacity 1s cubic-bezier(.19,1,.22,1),transform 1s cubic-bezier(.19,1,.22,1),filter 1s ease;display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-bottom:18px;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,.16)">
+        <div style="display:flex;align-items:baseline;gap:18px;flex-wrap:wrap">
+          <span style="font-family:'Space Mono',monospace;font-size:16px;letter-spacing:.18em;color:#ffffff;opacity:.7">${String(ci+1).padStart(2,'0')}</span>
+          <h3 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(1.7rem,3.4vw,2.8rem);line-height:1;letter-spacing:-.02em;color:#f4f3ef">${catName}</h3>
+        </div>
+        <span style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#f4f3ef;opacity:.6">${countLabel}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,480px),1fr));gap:clamp(16px,2vw,28px);perspective:1400px" data-card-grid></div>
+    `;
+
+    const grid = catDiv.querySelector('[data-card-grid]');
+
+    if (list.length === 0) {
+      grid.innerHTML = `<div style="grid-column:1/-1;border:1px dashed rgba(255,255,255,.2);border-radius:14px;padding:clamp(40px,7vh,80px) 30px;text-align:center;background:rgba(16,17,21,.3);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)"><div style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:1.5rem;color:#f4f3ef">In production</div><div style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:#f4f3ef;opacity:.7;margin-top:12px">New FX &amp; Motion work is on the way</div></div>`;
+    } else {
+      list.forEach(p => {
+        gi++;
+        const num = String(gi).padStart(2,'0');
+        const card = document.createElement('article');
+        card.setAttribute('data-tilt-card','');
+        card.setAttribute('data-reveal','');
+        card.setAttribute('tabindex','0');
+        card.style.cssText = 'opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity .9s cubic-bezier(.19,1,.22,1),transform .9s cubic-bezier(.19,1,.22,1),filter .9s ease;position:relative;aspect-ratio:16/10;border-radius:18px;overflow:hidden;background:#15161a;border:1px solid rgba(255,255,255,.1);transform-style:preserve-3d;will-change:transform;cursor:pointer';
+        card.innerHTML = `
+          <img src="${esc(thumb(p.folder,p.cover))}" alt="${esc(p.title)}" loading="lazy" draggable="false" data-card-img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.19,1,.22,1);transform:scale(1.03)">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,9,11,.9) 0%,rgba(8,9,11,.15) 54%,transparent 80%)"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;margin:clamp(14px,1.5vw,20px);padding:clamp(16px,1.8vw,24px);border-radius:14px;background:rgba(16,17,21,.46);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.16);transform:translateZ(40px)">
+            <div style="display:flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.14em;color:#ffffff;margin-bottom:10px"><span style="opacity:.7">${num}</span><span style="flex:1;height:1px;background:rgba(255,255,255,.22)"></span></div>
+            <h4 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(1.2rem,1.8vw,1.7rem);line-height:1.05;letter-spacing:-.01em;color:#f4f3ef">${esc(p.title)}</h4>
+            <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:7px">${p.tools.map(t=>`<span style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.04em;color:#f4f3ef;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:100px;padding:5px 13px">${esc(t)}</span>`).join('')}</div>
+          </div>`;
+        card.addEventListener('click', () => openCase(p.id));
+        card.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();openCase(p.id);} });
+        grid.appendChild(card);
+      });
+    }
+    workGrid.appendChild(catDiv);
+  });
+
+  // ---- RENDER STACK ----
+  document.getElementById('stack-chips').innerHTML = STACK.map(t =>
+    `<span data-chip style="font-family:'Space Mono',monospace;font-size:14px;color:#f4f3ef;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:100px;padding:9px 15px;transition:border-color .3s,background .3s">${esc(t)}</span>`
+  ).join('');
+
+  // ---- RENDER JOBS ----
+  document.getElementById('jobs-timeline').innerHTML = JOBS.map(j => `
+    <div style="position:relative;padding:6px 0 34px">
+      <span style="position:absolute;left:calc(-1 * clamp(22px,3vw,40px) - 1px);top:13px;width:9px;height:9px;border-radius:50%;background:${esc(j.dot)};transform:translateX(-50%);box-shadow:0 0 0 5px #0e0f13"></span>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;align-items:baseline">
+        <h3 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:500;font-size:clamp(1.2rem,2vw,1.55rem);letter-spacing:-.01em;color:#f4f3ef">${esc(j.role)}</h3>
+        <span style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.12em;color:#f4f3ef;opacity:.6">${esc(j.when)}</span>
+      </div>
+      <div style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#ffffff;opacity:.85;margin:8px 0 14px">${esc(j.org)}</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px">${j.points.map(pt=>`<li style="color:#f4f3ef;opacity:.82;font-size:.97rem;font-weight:300;line-height:1.55;padding-left:18px;position:relative"><span style="position:absolute;left:0;top:11px;width:7px;height:1px;background:rgba(255,255,255,.5)"></span>${esc(pt)}</li>`).join('')}</ul>
+    </div>`
+  ).join('');
+
+  // ---- RENDER EDUCATION ----
+  document.getElementById('education-list').innerHTML = EDUCATION.map(ed => `
+    <div style="border-left:1px solid rgba(255,255,255,.2);padding:5px 0 5px 17px;margin-bottom:20px">
+      <div style="font-weight:500;color:#f4f3ef;font-size:1.04rem">${esc(ed.school)}</div>
+      <div style="color:#f4f3ef;opacity:.62;font-size:.86rem;margin-top:4px;font-weight:300">${esc(ed.detail)}</div>
+    </div>`
+  ).join('');
+
+  // ---- RENDER AWARDS ----
+  document.getElementById('awards-list').innerHTML = AWARDS.map(aw => `
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:20px 22px;margin-bottom:13px">
+      <div style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:500;font-size:1.04rem;color:#f4f3ef;display:flex;align-items:center;gap:11px"><span style="font-size:.7rem;opacity:.7">◆</span>${esc(aw.title)}</div>
+      <p style="color:#f4f3ef;opacity:.7;font-size:.9rem;font-weight:300;margin-top:8px;padding-left:24px">${esc(aw.detail)}</p>
+    </div>`
+  ).join('');
+
+  // ---- REVEAL ON SCROLL ----
+  const reveals = [...document.querySelectorAll('[data-reveal]')];
+  const showEl = el => { el.style.opacity='1'; el.style.transform='none'; el.style.filter='none'; };
+  if (reduce) { reveals.forEach(showEl); }
+  else {
+    let pending = reveals.slice();
+    let revInt;
+    const check = () => {
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      pending = pending.filter(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < vh * 0.9 && r.bottom > -40) { showEl(el); return false; }
+        return true;
+      });
+      if (!pending.length && revInt) { clearInterval(revInt); revInt = null; }
+    };
+    check();
+    window.addEventListener('scroll', check, {passive:true});
+    window.addEventListener('resize', check);
+    revInt = setInterval(check, 150);
+  }
+
+  // ---- PANEL TILT ----
+  if (!reduce && fine) {
+    document.querySelectorAll('[data-tilt]').forEach(wrap => {
+      const inner = wrap.querySelector('[data-tilt-inner]');
+      if (!inner) return;
+      wrap.addEventListener('mousemove', e => {
+        const r = wrap.getBoundingClientRect();
+        const px = (e.clientX-r.left)/r.width-.5, py = (e.clientY-r.top)/r.height-.5;
+        inner.style.transition = 'transform .15s ease-out';
+        inner.style.transform = `rotateY(${(px*5).toFixed(2)}deg) rotateX(${(-py*5).toFixed(2)}deg)`;
+      });
+      wrap.addEventListener('mouseleave', () => {
+        inner.style.transition = 'transform .6s cubic-bezier(.19,1,.22,1)';
+        inner.style.transform = 'rotateY(0) rotateX(0)';
+      });
+    });
+  }
+
+  // ---- CARD TILT (event delegation) ----
+  if (!reduce && fine) {
+    document.addEventListener('mousemove', e => {
+      const card = e.target.closest('[data-tilt-card]');
+      if (!card) return;
+      const img = card.querySelector('[data-card-img]');
+      const r = card.getBoundingClientRect();
+      const tx = ((e.clientX-r.left)/r.width-.5)*2;
+      const ty = ((e.clientY-r.top)/r.height-.5)*2;
+      if (img) img.style.transform = 'scale(1.08)';
+      card.style.transform = `rotateY(${(tx*6).toFixed(2)}deg) rotateX(${(-ty*6).toFixed(2)}deg) translateY(-4px)`;
+    }, {passive:true});
+    document.addEventListener('mouseleave', e => {
+      const card = e.target.closest('[data-tilt-card]');
+      if (!card) return;
+      const img = card.querySelector('[data-card-img]');
+      if (img) img.style.transform = 'scale(1.03)';
+      card.style.transform = '';
+    }, true);
+  }
+
+  // ---- NAV SCROLL ----
+  const nav = document.getElementById('nav'); let lastY = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > 30) {
+      nav.style.background = 'rgba(14,15,19,.6)';
+      nav.style.backdropFilter = 'blur(22px) saturate(160%)';
+      nav.style.webkitBackdropFilter = 'blur(22px) saturate(160%)';
+      nav.style.borderBottomColor = 'rgba(255,255,255,.1)';
+      nav.style.paddingTop = '12px';
+      nav.style.paddingBottom = '12px';
+    } else {
+      nav.style.background = 'transparent';
+      nav.style.backdropFilter = 'none';
+      nav.style.webkitBackdropFilter = 'none';
+      nav.style.borderBottomColor = 'transparent';
+      nav.style.paddingTop = '';
+      nav.style.paddingBottom = '';
+    }
+    nav.style.transform = (y > lastY && y > 260) ? 'translateY(-105%)' : 'translateY(0)';
+    lastY = y;
+  }, {passive:true});
+
+  // ---- SMOOTH ANCHOR NAV ----
+  document.querySelectorAll('[data-nav]').forEach(a => {
+    a.addEventListener('click', e => {
+      const href = a.getAttribute('href');
+      if (!href || href[0] !== '#') return;
+      const t = href === '#top' ? document.body : document.querySelector(href);
+      if (!t) return;
+      e.preventDefault();
+      const y = href === '#top' ? 0 : (t.getBoundingClientRect().top + window.scrollY - 10);
+      window.scrollTo({top: y, behavior: reduce ? 'auto' : 'smooth'});
+    });
+  });
+
+  // ---- MAGNETIC BUTTONS ----
+  if (!reduce && fine) {
+    document.querySelectorAll('[data-mag]').forEach(el => {
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        el.style.transform = `translate(${((e.clientX-r.left-r.width/2)*.18).toFixed(1)}px,${((e.clientY-r.top-r.height/2)*.3).toFixed(1)}px)`;
+      });
+      el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+    });
+  }
+
+  // ---- CHIP + NAVLINK HOVER ----
+  document.querySelectorAll('[data-chip]').forEach(c => {
+    c.addEventListener('mouseenter', () => { c.style.borderColor='rgba(255,255,255,.5)'; c.style.background='rgba(255,255,255,.16)'; });
+    c.addEventListener('mouseleave', () => { c.style.borderColor=''; c.style.background=''; });
+  });
+  document.querySelectorAll('[data-navlink]').forEach(l => {
+    l.addEventListener('mouseenter', () => l.style.opacity='1');
+    l.addEventListener('mouseleave', () => l.style.opacity='.6');
+  });
+
+  // ---- CASE STUDY ----
+  const cs     = document.getElementById('cs');
+  const lb     = document.getElementById('lb');
+  const lbImg  = document.getElementById('lb-img');
+  const lbCt   = document.getElementById('lb-ct');
+  let lbIdx = 0, csImages = [];
+
+  document.getElementById('cs-close').addEventListener('click', closeCase);
+  document.getElementById('lb-close').addEventListener('click', closeLb);
+  document.getElementById('lb-prev').addEventListener('click', () => lbStep(-1));
+  document.getElementById('lb-next').addEventListener('click', () => lbStep(1));
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', e => {
+    if (lb.style.visibility === 'visible') {
+      if (e.key==='Escape') closeLb();
+      else if (e.key==='ArrowLeft') lbStep(-1);
+      else if (e.key==='ArrowRight') lbStep(1);
+      return;
+    }
+    if (cs.style.visibility === 'visible' && e.key==='Escape') closeCase();
+  });
+
+  function openCase(id) {
+    const p = PROJECTS.find(x => x.id === id); if (!p) return;
+    document.getElementById('cs-cat').textContent   = p.cat;
+    document.getElementById('cs-title').textContent = p.title;
+    document.getElementById('cs-desc').textContent  = p.desc || '';
+    document.getElementById('cs-tools').innerHTML   = p.tools.map(t =>
+      `<span style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.06em;color:#f4f3ef;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:8px 15px">${esc(t)}</span>`
+    ).join('');
+    csImages = p.images.map(n => full(p.folder, n));
+    const shots = document.getElementById('cs-shots');
+    shots.innerHTML = p.images.map((n,i) =>
+      `<figure style="position:relative;border-radius:12px;overflow:hidden;background:#15161a;border:1px solid rgba(255,255,255,.1)">
+        <span style="position:absolute;top:14px;left:16px;z-index:2;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.1em;color:#fff;background:rgba(8,9,11,.55);backdrop-filter:blur(8px);padding:5px 11px;border-radius:100px">${String(i+1).padStart(2,'0')} / ${String(p.images.length).padStart(2,'0')}</span>
+        <img src="${full(p.folder,n)}" alt="${esc(p.title)} ${i+1}" loading="lazy" style="width:100%;height:auto;display:block;cursor:zoom-in">
+      </figure>`
+    ).join('');
+    shots.querySelectorAll('figure img').forEach((img,i) => img.addEventListener('click', () => openLb(i)));
+
+    const idx = PROJECTS.indexOf(p), prev = PROJECTS[idx-1], next = PROJECTS[idx+1];
+    const navWrap = document.getElementById('cs-nav');
+    const link = (p2,dir) => p2
+      ? `<a data-csnav="${esc(p2.id)}" style="cursor:pointer;max-width:46%;text-align:${dir==='next'?'right':'left'}"><span style="display:block;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4f3ef;opacity:.6;margin-bottom:8px">${dir==='next'?'Next →':'← Previous'}</span><span style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(1.1rem,2.4vw,1.7rem);letter-spacing:-.02em;color:#f4f3ef">${esc(p2.title)}</span></a>`
+      : `<span style="opacity:.3;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#f4f3ef">— ${dir==='next'?'End':'Start'} —</span>`;
+    navWrap.innerHTML = link(prev,'prev') + link(next,'next');
+    navWrap.querySelectorAll('[data-csnav]').forEach(a => a.addEventListener('click', () => openCase(a.getAttribute('data-csnav'))));
+    cs.scrollTop = 0; cs.style.opacity='1'; cs.style.visibility='visible';
+    document.documentElement.style.overflow='hidden'; document.body.style.overflow='hidden';
+  }
+  function closeCase(){ cs.style.opacity='0'; cs.style.visibility='hidden'; document.documentElement.style.overflow=''; document.body.style.overflow=''; }
+  function showLb(){ lbImg.src=csImages[lbIdx]; lbCt.textContent=`${lbIdx+1} / ${csImages.length}`; }
+  function openLb(i){ lbIdx=i; showLb(); lb.style.opacity='1'; lb.style.visibility='visible'; }
+  function closeLb(){ lb.style.opacity='0'; lb.style.visibility='hidden'; }
+  function lbStep(d){ lbIdx=(lbIdx+d+csImages.length)%csImages.length; showLb(); }
+
+  // ---- THREE.JS CHROME OBJECTS ----
+  function initChrome() {
+    const canvas = document.getElementById('chrome3d');
+    if (!canvas || !window.THREE) return;
+    const THREE = window.THREE;
+
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
+    camera.position.set(0, 0, 9);
+
+    // ---- Painted equirectangular env map — large soft blobs via additive compositing
+    // Exact technique from the design file: dark base + lighter-mode radial blobs
+    function buildEnvTexture() {
+      const W=2048, H=1024;
+      const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+      const ctx=cv.getContext('2d');
+      // Dark base with subtle vertical falloff
+      const base=ctx.createLinearGradient(0,0,0,H);
+      base.addColorStop(0.00,'#1a1c20');
+      base.addColorStop(0.45,'#0c0d0f');
+      base.addColorStop(0.62,'#070708');
+      base.addColorStop(1.00,'#020203');
+      ctx.fillStyle=base; ctx.fillRect(0,0,W,H);
+      // Soft radial blobs — additive compositing for smooth streaky chrome reflections
+      function blob(x,y,r,color,alpha){
+        const g=ctx.createRadialGradient(x,y,0,x,y,r);
+        g.addColorStop(0,`rgba(${color},${alpha})`);
+        g.addColorStop(0.4,`rgba(${color},${alpha*0.5})`);
+        g.addColorStop(1,`rgba(${color},0)`);
+        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+      }
+      ctx.globalCompositeOperation='lighter';
+      // Big cool key light, upper area
+      blob(W*0.52, H*0.24, 620, '255,255,255', 0.95);
+      blob(W*0.30, H*0.30, 460, '245,248,255', 0.80);
+      // Wide soft band lower-mid
+      blob(W*0.66, H*0.52, 540, '255,255,255', 0.85);
+      blob(W*0.82, H*0.40, 360, '230,240,255', 0.70);
+      // Warm fill — gives gold/iridescent tint on rings
+      blob(W*0.16, H*0.55, 420, '255,238,210', 0.70);
+      blob(W*0.90, H*0.60, 340, '255,243,222', 0.60);
+      // Small crisp highlights for sparkle
+      blob(W*0.45, H*0.18, 150, '255,255,255', 1.00);
+      blob(W*0.74, H*0.30, 120, '255,255,255', 0.95);
+      ctx.globalCompositeOperation='source-over';
+      const tex=new THREE.CanvasTexture(cv);
+      tex.mapping=THREE.EquirectangularReflectionMapping;
+      return tex;
+    }
+
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    pmrem.compileEquirectangularShader();
+    // Instant fallback painted map — scene is never blank
+    const fallbackTex = buildEnvTexture();
+    const fallbackRT  = pmrem.fromEquirectangular(fallbackTex);
+    scene.environment = fallbackRT.texture;
+    fallbackTex.dispose();
+
+    // Try to load a real forest HDRI from Poly Haven for premium reflections
+    const HDRI_URLS = [
+      'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/forest_slope_2k.hdr',
+      'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/mossy_forest_2k.hdr'
+    ];
+    let hdrIdx=0;
+    function loadHDRI(){
+      if(hdrIdx>=HDRI_URLS.length){ pmrem.dispose(); return; }
+      if(typeof THREE.RGBELoader==='undefined'){ pmrem.dispose(); return; }
+      new THREE.RGBELoader()
+        .setDataType(THREE.HalfFloatType)
+        .load(HDRI_URLS[hdrIdx], (hdr)=>{
+          hdr.mapping=THREE.EquirectangularReflectionMapping;
+          const envRT=pmrem.fromEquirectangular(hdr);
+          scene.environment=envRT.texture;
+          hdr.dispose(); fallbackRT.dispose(); pmrem.dispose();
+        }, undefined, ()=>{ hdrIdx++; loadHDRI(); });
+    }
+    loadHDRI();
+
+    // No scene lights — environment map provides all illumination (true to design file)
+
+    // Chrome material — exactly as designed: medium-gray color, slight frost, env-map driven
+    const chromeMat = () => new THREE.MeshStandardMaterial({
+      color: 0x1e1f22,
+      metalness: 1.0,
+      roughness: 0.18,
+      envMapIntensity: 1.1
+    });
+    // Warm variant for torus objects (gives gold/iridescent edge in reflections)
+    const warmChromeMat = () => new THREE.MeshStandardMaterial({
+      color: 0x1e1f22,
+      metalness: 1.0,
+      roughness: 0.20,
+      envMapIntensity: 1.15
+    });
+
+    class HelixCurve extends THREE.Curve {
+      constructor(t,r,h){ super(); this._t=t; this._r=r; this._h=h; }
+      getPoint(t,opt){ const a=this._t*Math.PI*2*t; const p=opt||new THREE.Vector3(); return p.set(this._r*Math.cos(a),(t-.5)*this._h,this._r*Math.sin(a)); }
+    }
+    const geoms = {
+      sphere: () => new THREE.SphereGeometry(1,160,160),         // match design: 160×160
+      torus:  () => new THREE.TorusGeometry(1.0,0.36,96,320),   // match design: 96×320
+      knot:   () => new THREE.TorusKnotGeometry(0.78,0.24,300,40),
+      spring: () => new THREE.TubeGeometry(new HelixCurve(4.5,0.78,2.6),500,0.14,32,false),
+      ico:    () => new THREE.IcosahedronGeometry(1,6),          // subdivided smooth sphere-like
+      cone:   () => new THREE.ConeGeometry(0.85,1.7,120)
+    };
+
+    // [type, x, y, z, scale, floatAmp, floatSpeed, spinX, spinY, boundRadius]
+    const defs = [
+      ['sphere',  0.8,  0.0, -4.5, 3.0,  0.08, 0.40, 0.03, 0.06, 2.85],
+      ['torus',  -5.0,  0.2, -1.2, 1.6,  0.22, 0.55, 0.18, 0.28, 2.15],
+      ['sphere',  5.0,  2.0, -1.0, 1.0,  0.30, 0.80, 0.06, 0.14, 0.95],
+      ['spring',  4.4, -2.0,  0.2, 1.1,  0.24, 0.70, 0.28, 0.42, 1.35],
+      ['knot',   -4.0, -2.2, -0.4, 1.1,  0.28, 0.60, 0.24, 0.34, 1.25],
+      ['ico',     5.2,  0.4,  0.6, 0.80, 0.36, 0.95, 0.28, 0.46, 0.88],
+      ['cone',   -4.8,  2.0,  0.2, 0.90, 0.30, 0.78, 0.22, 0.26, 0.98],
+      ['sphere',  1.8,  3.0, -2.5, 0.70, 0.26, 0.65, 0.05, 0.10, 0.68],
+    ];
+
+    const WARM_TYPES = new Set(['torus','knot','spring']);
+    const objs = defs.map((d,i) => {
+      const [type,x,y,z,s,fa,fs,sx,sy,radius] = d;
+      const dir = (i%2===0) ? 1 : -1;
+      const mat = WARM_TYPES.has(type) ? warmChromeMat() : chromeMat();
+      const m = new THREE.Mesh(geoms[type](), mat);
+      m.position.set(x,y,z); m.scale.setScalar(s);
+      m.rotation.set(Math.random()*Math.PI*2,Math.random()*Math.PI*2,Math.random()*Math.PI*2);
+      // ox/oz = rest positions; offX/Y/Z = collision displacement; cvx/y/z = collision velocity
+      m.userData = {baseY:y, dir, fa, fs, sx, sy, ph:Math.random()*Math.PI*2,
+                    ox:x, oz:z, radius,
+                    offX:0, offY:0, offZ:0,
+                    cvx:0,  cvy:0,  cvz:0};
+      scene.add(m); return m;
+    });
+
+    const wrap   = canvas.parentElement;
+    const resize = () => { const w=wrap.clientWidth||innerWidth,h=wrap.clientHeight||innerHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); };
+    resize(); window.addEventListener('resize',resize);
+
+    let mx=0,my=0,smx=0,smy=0;
+    if (fine) window.addEventListener('mousemove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;},{passive:true});
+
+    const clock = new THREE.Clock();
+    (function loop(){
+      const t = clock.getElapsedTime();
+      const docH = Math.max(1,document.documentElement.scrollHeight-innerHeight);
+      const frac = Math.min(1,Math.max(0,(window.scrollY||0)/docH));
+      smx+=(mx-smx)*.04; smy+=(my-smy)*.04;
+      camera.position.x=smx*1.4; camera.position.y=-smy*1.0; camera.lookAt(0,0,0);
+
+      // 1. Spin + scripted float animation; integrate collision velocities into offsets
+      objs.forEach(o=>{
+        const u=o.userData;
+        if(!reduce){o.rotation.x+=u.sx*.01;o.rotation.y+=u.sy*.01;}
+        // Spring offsets back toward zero (objects return to base positions after bounce)
+        u.offX*=0.94; u.offY*=0.94; u.offZ*=0.94;
+        // Integrate collision velocity into offset, then damp velocity
+        u.offX+=u.cvx; u.offY+=u.cvy; u.offZ+=u.cvz;
+        u.cvx*=0.86; u.cvy*=0.86; u.cvz*=0.86;
+        // Scripted target y (scroll + float)
+        u.ty = u.baseY+Math.sin(t*u.fs+u.ph)*u.fa+(frac-.5)*1.6*u.dir;
+        o.position.set(u.ox+u.offX, u.ty+u.offY, u.oz+u.offZ);
+      });
+
+      // 2. Collision detection — two solver iterations for stability
+      for(let iter=0;iter<2;iter++){
+        for(let i=0;i<objs.length;i++){
+          for(let j=i+1;j<objs.length;j++){
+            const oi=objs[i], oj=objs[j];
+            const ui=oi.userData, uj=oj.userData;
+            const dx=oj.position.x-oi.position.x;
+            const dy=oj.position.y-oi.position.y;
+            const dz=oj.position.z-oi.position.z;
+            const dist2=dx*dx+dy*dy+dz*dz;
+            const minD=ui.radius+uj.radius;
+            if(dist2<minD*minD && dist2>0.0001){
+              const dist=Math.sqrt(dist2);
+              const nx=dx/dist, ny=dy/dist, nz=dz/dist;
+              const sep=(minD-dist)*0.5;
+              ui.offX-=nx*sep; ui.offY-=ny*sep; ui.offZ-=nz*sep;
+              uj.offX+=nx*sep; uj.offY+=ny*sep; uj.offZ+=nz*sep;
+              const rvx=uj.cvx-ui.cvx, rvy=uj.cvy-ui.cvy, rvz=uj.cvz-ui.cvz;
+              const rvn=rvx*nx+rvy*ny+rvz*nz;
+              if(rvn<0){
+                const imp=-(1+0.45)*rvn*0.5;
+                ui.cvx-=imp*nx; ui.cvy-=imp*ny; ui.cvz-=imp*nz;
+                uj.cvx+=imp*nx; uj.cvy+=imp*ny; uj.cvz+=imp*nz;
+              }
+              oi.position.set(ui.ox+ui.offX, ui.ty+ui.offY, ui.oz+ui.offZ);
+              oj.position.set(uj.ox+uj.offX, uj.ty+uj.offY, uj.oz+uj.offZ);
+            }
+          }
+        }
+      }
+
+      renderer.render(scene,camera);
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  // Wait for Three.js CDN script
+  let twTries=0;
+  (function waitThree(){ if(window.THREE){initChrome();} else if(twTries++<120){setTimeout(waitThree,50);} })();
+
+})();
+</script>
+</body>
+</html>
