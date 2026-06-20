@@ -195,32 +195,26 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fine = matchMedia('(pointer:fine)').matches;
 
-  // ---- DATA ----
-  const FOLDER_MAP = {
-    'vintage-cafe':           'assets/images/3D Art/Vintage Cafe (UE5)',
-    'beyond-human':           'assets/images/3D Art/Beyond Human (MAYA + V-Ray)',
-    'flood':                  'assets/images/3D Art/Flood Neighborhood (UE5)',
-    'victorian':              'assets/images/3D Art/Victorian bedroom (UE5)',
-    'axe':                    'assets/images/3D Art/Low Poly post apocalyptic Axe (MAYA + Marmoset Toolbox)',
-    'sf-cafe':                'assets/images/ArchViz/San Francisco Cafe (3DS Max + V-Ray)',
-    'kitchen':                'assets/images/ArchViz/Rustic Italian Kitchen Design (3DS Max + V-Ray)',
-    'bathroom':               'assets/images/ArchViz/Transitional Bathroom Design (3DS Max + V-Ray)',
-    '5250':                   'assets/images/ArchViz/5250 3rd Street (3DS Max + V-Ray)'
-  };
+  // ---- HELPERS ----
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+  function thumb(folder, filename){
+    const base = filename.replace(/\.[^.]+$/, '');
+    return folder + '/' + base + '.thumb.webp';
+  }
+  function full(folder, filename){
+    const base = filename.replace(/\.[^.]+$/, '');
+    return folder + '/' + base + '.webp';
+  }
+  function ytId(url){
+    const m = String(url||'').match(/(?:youtu\.be\/|[?&]v=)([a-zA-Z0-9_-]{11})/);
+    return m ? m[1] : null;
+  }
+  function ytThumb(url){ const id=ytId(url); return id?'https://img.youtube.com/vi/'+id+'/maxresdefault.jpg':''; }
+  function ytEmbed(url){ const id=ytId(url); return id?'https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0':url; }
 
-  const PROJECTS = [
-    {id:'vintage-cafe',           title:'Vintage Cafe',                    cat:'Game Art', tools:['Unreal Engine 5'],          folder:'vintage-cafe', cover:1, images:[1,2,3,4,5,6,7,8], desc:'A lived-in vintage diner built and lit in Unreal Engine 5 — neon signage, patinated surfaces and warm practical lighting carrying the mood across the room.'},
-    {id:'beyond-human',           title:'Beyond Human',                    cat:'Game Art', tools:['Maya','V-Ray'],             folder:'beyond-human', cover:1, images:[1,2],              desc:'A stylised cliff-side settlement modelled in Maya and rendered with V-Ray — bold silhouettes, layered structures and atmospheric depth.'},
-    {id:'flood-neighborhood',     title:'Flood Neighborhood',              cat:'Game Art', tools:['Unreal Engine 5'],          folder:'flood',        cover:1, images:[1,2,3],            desc:'A submerged residential street staged in Unreal Engine 5, exploring reflections, scale and the eerie calm of a flooded environment.'},
-    {id:'victorian-bedroom',      title:'Victorian Bedroom',               cat:'Game Art', tools:['Unreal Engine 5'],          folder:'victorian',    cover:1, images:[1,2,3,4],          desc:'An ornate Victorian interior in Unreal Engine 5 — period furnishings, rich materials and soft window light dressing the space.'},
-    {id:'post-apocalyptic-axe',   title:'Low-Poly Post-Apocalyptic Axe',  cat:'Game Art', tools:['Maya','Marmoset Toolbag'],  folder:'axe',          cover:1, images:[1,2,3],            desc:'A game-ready post-apocalyptic axe — low-poly modelled in Maya, textured and presented in Marmoset Toolbag with hand-worn detail.'},
-    {id:'san-francisco-cafe',     title:'San Francisco Cafe',              cat:'ArchViz',  tools:['3ds Max','V-Ray'],          folder:'sf-cafe',      cover:1, images:[1,2],              desc:'Architectural visualization of a San Francisco cafe interior — 3ds Max and V-Ray, with photoreal materials and balanced daylight.'},
-    {id:'rustic-italian-kitchen', title:'Rustic Italian Kitchen',          cat:'ArchViz',  tools:['3ds Max','V-Ray'],          folder:'kitchen',      cover:1, images:[1,2,3,4],          desc:'A warm rustic Italian kitchen design — 3ds Max and V-Ray, featuring natural stone, aged timber and inviting interior lighting.'},
-    {id:'transitional-bathroom',  title:'Transitional Bathroom',           cat:'ArchViz',  tools:['3ds Max','V-Ray'],          folder:'bathroom',     cover:1, images:[1,2,3],            desc:'A transitional bathroom interior visualized in 3ds Max and V-Ray — clean lines, refined fixtures and soft, even lighting.'},
-    {id:'5250-3rd-street',        title:'5250 3rd Street',                 cat:'ArchViz',  tools:['3ds Max','V-Ray'],          folder:'5250',         cover:1, images:[1,2],              desc:'Exterior architectural visualization of 5250 3rd Street — 3ds Max and V-Ray, with accurate massing, materials and environment lighting.'}
-  ];
-  const CATS   = ['Game Art','ArchViz','FX & Motion'];
-  const STACK  = ['3ds Max','Maya','Blender','Substance Painter','Unreal Engine','Unity','V-Ray','Photoshop','Real-Time Rendering','Asset Optimization','Environment Design','Hard-Surface Modeling','PBR Materials','Lighting & Composition'];
+  // ---- STATIC DATA ----
+  const STACK = ['3ds Max','Maya','Blender','Substance Painter','Unreal Engine','Unity','V-Ray','Photoshop','Real-Time Rendering','Asset Optimization','Environment Design','Hard-Surface Modeling','PBR Materials','Lighting & Composition'];
+
   const JOBS   = [
     {role:'3D Visual Designer',              when:'JUL 2025 — PRESENT',    org:'Pixxel18Studios · Los Angeles', dot:'#2a9d5a',  points:['Create realistic, high-quality 3D surface models, textures and environments.','Deliver photoreal renderings and animations for commercial and industrial visualization.','Collaborate with art directors and clients to maintain consistency and hit deadlines.']},
     {role:'3D Generalist / Production Manager IV',   when:'JUL 2024 — JUN 2025', org:'Apple Inc. · Cupertino',        dot:'#cfd1d7', points:['Automated scene-building and camera setup with Python, cutting production time ~60%.','Managed QA across 1000+ 3D projects for visual consistency and performance.','Created 1000+ realistic scenes across varied themes.']},
@@ -239,64 +233,86 @@
     {title:'Certification', detail:'Adobe Visual Communication with Photoshop · 2012'}
   ];
 
-  function thumb(folder, n){ return FOLDER_MAP[folder] + '/' + n + '.thumb.webp'; }
-  function full(folder, n){  return FOLDER_MAP[folder] + '/' + n + '.webp'; }
-  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
 
   // ---- FOOTER YEAR ----
   document.getElementById('footer-year').textContent = '© ' + new Date().getFullYear() + ' Rudhra Senapati';
 
   // ---- RENDER WORK GRID ----
-  const workGrid = document.getElementById('work-grid');
-  let gi = 0;
-  CATS.forEach((catName, ci) => {
-    const list = PROJECTS.filter(p => p.cat === catName);
-    const countLabel = list.length
-      ? String(list.length).padStart(2,'0') + ' project' + (list.length===1?'':'s')
-      : 'Coming soon';
+  const _PDATA = {"categories":["Game Art","ArchViz","FX & Motion"],"projects":[{"id":"vintage-cafe","title":"Vintage Cafe","category":"Game Art","tools":["Unreal Engine 5"],"description":"A lived-in vintage diner built and lit in Unreal Engine 5 — neon signage, patinated surfaces and warm practical lighting carrying the mood across the room.","folder":"assets/images/3D Art/Vintage Cafe (UE5)","cover":"1.png","images":["1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png"],"video":""},{"id":"beyond-human","title":"Beyond Human","category":"Game Art","tools":["Maya","V-Ray"],"description":"A stylised cliff-side settlement modelled in Maya and rendered with V-Ray — bold silhouettes, layered structures and atmospheric depth.","folder":"assets/images/3D Art/Beyond Human (MAYA + V-Ray)","cover":"1.png","images":["1.png","2.png"],"video":""},{"id":"flood-neighborhood","title":"Flood Neighborhood","category":"Game Art","tools":["Unreal Engine 5"],"description":"A submerged residential street staged in Unreal Engine 5, exploring reflections, scale and the eerie calm of a flooded environment.","folder":"assets/images/3D Art/Flood Neighborhood (UE5)","cover":"1.png","images":["1.png","2.png","3.png"],"video":""},{"id":"victorian-bedroom","title":"Victorian Bedroom","category":"Game Art","tools":["Unreal Engine 5"],"description":"An ornate Victorian interior in Unreal Engine 5 — period furnishings, rich materials and soft window light dressing the space.","folder":"assets/images/3D Art/Victorian bedroom (UE5)","cover":"1.png","images":["1.png","2.png","3.png","4.png"],"video":""},{"id":"post-apocalyptic-axe","title":"Low-Poly Post-Apocalyptic Axe","category":"Game Art","tools":["Maya","Marmoset Toolbag"],"description":"A game-ready post-apocalyptic axe — low-poly modelled in Maya, textured and presented in Marmoset Toolbag with hand-worn detail.","folder":"assets/images/3D Art/Low Poly post apocalyptic Axe (MAYA + Marmoset Toolbox)","cover":"1.png","images":["1.png","2.png","3.png"],"video":""},{"id":"san-francisco-cafe","title":"San Francisco Cafe","category":"ArchViz","tools":["3ds Max","V-Ray"],"description":"Architectural visualization of a San Francisco cafe interior — 3ds Max and V-Ray, with photoreal materials and balanced daylight.","folder":"assets/images/ArchViz/San Francisco Cafe (3DS Max + V-Ray)","cover":"1.png","images":["1.png","2.png"],"video":""},{"id":"rustic-italian-kitchen","title":"Rustic Italian Kitchen","category":"ArchViz","tools":["3ds Max","V-Ray"],"description":"A warm rustic Italian kitchen design — 3ds Max and V-Ray, featuring natural stone, aged timber and inviting interior lighting.","folder":"assets/images/ArchViz/Rustic Italian Kitchen Design (3DS Max + V-Ray)","cover":"1.png","images":["1.png","2.png","3.png","4.png"],"video":""},{"id":"transitional-bathroom","title":"Transitional Bathroom","category":"ArchViz","tools":["3ds Max","V-Ray"],"description":"A transitional bathroom interior visualized in 3ds Max and V-Ray — clean lines, refined fixtures and soft, even lighting.","folder":"assets/images/ArchViz/Transitional Bathroom Design (3DS Max + V-Ray)","cover":"1.png","images":["1.png","2.png","3.png"],"video":""},{"id":"5250-3rd-street","title":"5250 3rd Street","category":"ArchViz","tools":["3ds Max","V-Ray"],"description":"Exterior architectural visualization of 5250 3rd Street — 3ds Max and V-Ray, with accurate massing, materials and environment lighting.","folder":"assets/images/ArchViz/5250 3rd Street (3DS Max + V-Ray)","cover":"1.png","images":["1.png","2.png"],"video":""},{"id":"ritual","title":"RITUAL","category":"FX & Motion","tools":["Sony FX6","Cinematography","Premiere Pro"],"description":"","folder":"","cover":"","images":[],"video":"https://youtu.be/CQkIomiQa7U"},{"id":"angels-flight","title":"Angels Flight","category":"FX & Motion","tools":["Sony FX6","Premiere Pro"],"description":"","folder":"","cover":"","images":[],"video":"https://youtu.be/ZdoICHUbG-g"},{"id":"sci-fi-animation","title":"Sci-Fi Animation","category":"FX & Motion","tools":["Maya","V-Ray"],"description":"","folder":"","cover":"","images":[],"video":"https://youtu.be/aSHjj5CgRZs"},{"id":"lego-animation","title":"Lego Animation","category":"FX & Motion","tools":["Maya","V-Ray"],"description":"","folder":"","cover":"","images":[],"video":"https://youtu.be/5eoQgcHJT18"},{"id":"simple-dynamics","title":"Simple Dynamics","category":"FX & Motion","tools":["Maya","V-Ray"],"description":"","folder":"","cover":"","images":[],"video":"https://youtu.be/PO0HyHAaoFE"},{"id":"animated-promo-motion-graphics","title":"Animated Promo - Motion Graphics","category":"FX & Motion","tools":["After Effects"],"description":"","folder":"","cover":"","images":[],"video":"https://youtu.be/t_6Y0X11YXY"},{"id":"hud","title":"HUD","category":"FX & Motion","tools":["After Effects"],"description":"","folder":"","cover":"","images":[],"video":"https://youtu.be/ftPax56Ran4"}]};
+  let ALL_PROJECTS = [];
+  async function initProjects() {
+    let data = _PDATA;
+    try {
+      const resp = await fetch('projects.json?' + Date.now());
+      data = await resp.json();
+    } catch(e) { /* use inline fallback */ }
+    try {
+      ALL_PROJECTS = data.projects || [];
+      const cats = data.categories || [];
+      const workGrid = document.getElementById('work-grid');
+      let gi = 0;
+      cats.forEach((catName, ci) => {
+        const list = ALL_PROJECTS.filter(p => p.category === catName);
+        const countLabel = list.length
+          ? String(list.length).padStart(2,'0') + ' project' + (list.length===1?'':'s')
+          : 'Coming soon';
 
-    const catDiv = document.createElement('div');
-    catDiv.style.marginBottom = 'clamp(44px,7vh,84px)';
-    catDiv.innerHTML = `
-      <div data-reveal style="opacity:0;transform:translateY(36px);filter:blur(6px);transition:opacity 1s cubic-bezier(.19,1,.22,1),transform 1s cubic-bezier(.19,1,.22,1),filter 1s ease;display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-bottom:18px;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,.16)">
-        <div style="display:flex;align-items:baseline;gap:18px;flex-wrap:wrap">
-          <span style="font-family:'Space Mono',monospace;font-size:16px;letter-spacing:.18em;color:#ffffff;opacity:.7">${String(ci+1).padStart(2,'0')}</span>
-          <h3 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(1.7rem,3.4vw,2.8rem);line-height:1;letter-spacing:-.02em;color:#f4f3ef">${catName}</h3>
-        </div>
-        <span style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#f4f3ef;opacity:.6">${countLabel}</span>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,480px),1fr));gap:clamp(16px,2vw,28px);perspective:1400px" data-card-grid></div>
-    `;
+        const catDiv = document.createElement('div');
+        catDiv.style.marginBottom = 'clamp(44px,7vh,84px)';
+        catDiv.innerHTML = `
+          <div data-reveal style="opacity:0;transform:translateY(36px);filter:blur(6px);transition:opacity 1s cubic-bezier(.19,1,.22,1),transform 1s cubic-bezier(.19,1,.22,1),filter 1s ease;display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-bottom:18px;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,.16)">
+            <div style="display:flex;align-items:baseline;gap:18px;flex-wrap:wrap">
+              <span style="font-family:'Space Mono',monospace;font-size:16px;letter-spacing:.18em;color:#ffffff;opacity:.7">${String(ci+1).padStart(2,'0')}</span>
+              <h3 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(1.7rem,3.4vw,2.8rem);line-height:1;letter-spacing:-.02em;color:#f4f3ef">${catName}</h3>
+            </div>
+            <span style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#f4f3ef;opacity:.6">${countLabel}</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,480px),1fr));gap:clamp(16px,2vw,28px);perspective:1400px" data-card-grid></div>
+        `;
 
-    const grid = catDiv.querySelector('[data-card-grid]');
+        const grid = catDiv.querySelector('[data-card-grid]');
 
-    if (list.length === 0) {
-      grid.innerHTML = `<div style="grid-column:1/-1;border:1px dashed rgba(255,255,255,.2);border-radius:14px;padding:clamp(40px,7vh,80px) 30px;text-align:center;background:rgba(16,17,21,.3);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)"><div style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:1.5rem;color:#f4f3ef">In production</div><div style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:#f4f3ef;opacity:.7;margin-top:12px">New FX &amp; Motion work is on the way</div></div>`;
-    } else {
-      list.forEach(p => {
-        gi++;
-        const num = String(gi).padStart(2,'0');
-        const card = document.createElement('article');
-        card.setAttribute('data-tilt-card','');
-        card.setAttribute('data-reveal','');
-        card.setAttribute('tabindex','0');
-        card.style.cssText = 'opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity .9s cubic-bezier(.19,1,.22,1),transform .9s cubic-bezier(.19,1,.22,1),filter .9s ease;position:relative;aspect-ratio:16/10;border-radius:18px;overflow:hidden;background:#15161a;border:1px solid rgba(255,255,255,.1);transform-style:preserve-3d;will-change:transform;cursor:pointer';
-        card.innerHTML = `
-          <img src="${esc(thumb(p.folder,p.cover))}" alt="${esc(p.title)}" loading="lazy" draggable="false" data-card-img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.19,1,.22,1);transform:scale(1.03)">
-          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,9,11,.9) 0%,rgba(8,9,11,.15) 54%,transparent 80%)"></div>
-          <div style="position:absolute;left:0;right:0;bottom:0;margin:clamp(14px,1.5vw,20px);padding:clamp(16px,1.8vw,24px);border-radius:14px;background:rgba(16,17,21,.46);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.16);transform:translateZ(40px)">
-            <div style="display:flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.14em;color:#ffffff;margin-bottom:10px"><span style="opacity:.7">${num}</span><span style="flex:1;height:1px;background:rgba(255,255,255,.22)"></span></div>
-            <h4 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(1.2rem,1.8vw,1.7rem);line-height:1.05;letter-spacing:-.01em;color:#f4f3ef">${esc(p.title)}</h4>
-            <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:7px">${p.tools.map(t=>`<span style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.04em;color:#f4f3ef;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:100px;padding:5px 13px">${esc(t)}</span>`).join('')}</div>
-          </div>`;
-        card.addEventListener('click', () => openCase(p.id));
-        card.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();openCase(p.id);} });
-        grid.appendChild(card);
+        if (list.length === 0) {
+          grid.innerHTML = `<div style="grid-column:1/-1;border:1px dashed rgba(255,255,255,.2);border-radius:14px;padding:clamp(40px,7vh,80px) 30px;text-align:center;background:rgba(16,17,21,.3);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)"><div style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:1.5rem;color:#f4f3ef">In production</div><div style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:#f4f3ef;opacity:.7;margin-top:12px">Coming soon</div></div>`;
+        } else {
+          list.forEach(p => {
+            gi++;
+            const num = String(gi).padStart(2,'0');
+            const isVideo = !p.images?.length && p.video;
+            const cardBg = isVideo
+              ? ytThumb(p.video)
+              : (p.cover ? thumb(p.folder, p.cover) : (p.images?.[0] ? thumb(p.folder, p.images[0]) : ''));
+            const card = document.createElement('article');
+            card.setAttribute('data-tilt-card','');
+            card.setAttribute('data-reveal','');
+            card.setAttribute('tabindex','0');
+            card.style.cssText = 'opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity .9s cubic-bezier(.19,1,.22,1),transform .9s cubic-bezier(.19,1,.22,1),filter .9s ease;position:relative;aspect-ratio:16/10;border-radius:18px;overflow:hidden;background:#15161a;border:1px solid rgba(255,255,255,.1);transform-style:preserve-3d;will-change:transform;cursor:pointer';
+            card.innerHTML = `
+              ${cardBg ? `<img src="${esc(cardBg)}" alt="${esc(p.title)}" loading="lazy" draggable="false" data-card-img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.19,1,.22,1);transform:scale(1.03)">` : ''}
+              ${isVideo ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1"><div style="width:60px;height:60px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div></div>` : ''}
+              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,9,11,.9) 0%,rgba(8,9,11,.15) 54%,transparent 80%)"></div>
+              <div style="position:absolute;left:0;right:0;bottom:0;margin:clamp(14px,1.5vw,20px);padding:clamp(16px,1.8vw,24px);border-radius:14px;background:rgba(16,17,21,.46);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.16);transform:translateZ(40px)">
+                <div style="display:flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.14em;color:#ffffff;margin-bottom:10px"><span style="opacity:.7">${num}</span><span style="flex:1;height:1px;background:rgba(255,255,255,.22)"></span></div>
+                <h4 style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(1.2rem,1.8vw,1.7rem);line-height:1.05;letter-spacing:-.01em;color:#f4f3ef">${esc(p.title)}</h4>
+                <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:7px">${(p.tools||[]).map(t=>`<span style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.04em;color:#f4f3ef;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:100px;padding:5px 13px">${esc(t)}</span>`).join('')}</div>
+              </div>`;
+            card.addEventListener('click', () => openCase(p.id));
+            card.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();openCase(p.id);} });
+            grid.appendChild(card);
+          });
+        }
+        workGrid.appendChild(catDiv);
       });
-    }
-    workGrid.appendChild(catDiv);
-  });
 
+      // Reveal newly added elements (async load means scroll-reveal already ran)
+      requestAnimationFrame(() => setTimeout(() => {
+        workGrid.querySelectorAll('[data-reveal]').forEach(el => {
+          el.style.opacity='1'; el.style.transform='none'; el.style.filter='none';
+        });
+      }, 60));
+    } catch(e) { console.warn('projects.json load failed', e); }
+  }
+  initProjects();
   // ---- RENDER STACK ----
   document.getElementById('stack-chips').innerHTML = STACK.map(t =>
     `<span data-chip style="font-family:'Space Mono',monospace;font-size:14px;color:#f4f3ef;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:100px;padding:9px 15px;transition:border-color .3s,background .3s">${esc(t)}</span>`
@@ -472,24 +488,30 @@
   });
 
   function openCase(id) {
-    const p = PROJECTS.find(x => x.id === id); if (!p) return;
-    document.getElementById('cs-cat').textContent   = p.cat;
+    const p = ALL_PROJECTS.find(x => x.id === id); if (!p) return;
+    document.getElementById('cs-cat').textContent   = p.category || '';
     document.getElementById('cs-title').textContent = p.title;
-    document.getElementById('cs-desc').textContent  = p.desc || '';
-    document.getElementById('cs-tools').innerHTML   = p.tools.map(t =>
+    document.getElementById('cs-desc').textContent  = p.description || '';
+    document.getElementById('cs-tools').innerHTML   = (p.tools||[]).map(t =>
       `<span style="font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.06em;color:#f4f3ef;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:8px 15px">${esc(t)}</span>`
     ).join('');
-    csImages = p.images.map(n => full(p.folder, n));
     const shots = document.getElementById('cs-shots');
-    shots.innerHTML = p.images.map((n,i) =>
-      `<figure style="position:relative;border-radius:12px;overflow:hidden;background:#15161a;border:1px solid rgba(255,255,255,.1)">
-        <span style="position:absolute;top:14px;left:16px;z-index:2;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.1em;color:#fff;background:rgba(8,9,11,.55);backdrop-filter:blur(8px);padding:5px 11px;border-radius:100px">${String(i+1).padStart(2,'0')} / ${String(p.images.length).padStart(2,'0')}</span>
-        <img src="${full(p.folder,n)}" alt="${esc(p.title)} ${i+1}" loading="lazy" style="width:100%;height:auto;display:block;cursor:zoom-in">
-      </figure>`
-    ).join('');
-    shots.querySelectorAll('figure img').forEach((img,i) => img.addEventListener('click', () => openLb(i)));
+    const isVideo = !p.images?.length && p.video;
+    if (isVideo) {
+      csImages = [];
+      shots.innerHTML = `<div style="position:relative;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:16/9"><iframe src="${esc(ytEmbed(p.video))}" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="autoplay;fullscreen" allowfullscreen></iframe></div>`;
+    } else {
+      csImages = (p.images||[]).map(n => full(p.folder, n));
+      shots.innerHTML = (p.images||[]).map((n,i) =>
+        `<figure style="position:relative;border-radius:12px;overflow:hidden;background:#15161a;border:1px solid rgba(255,255,255,.1)">
+          <span style="position:absolute;top:14px;left:16px;z-index:2;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.1em;color:#fff;background:rgba(8,9,11,.55);backdrop-filter:blur(8px);padding:5px 11px;border-radius:100px">${String(i+1).padStart(2,'0')} / ${String(p.images.length).padStart(2,'0')}</span>
+          <img src="${full(p.folder,n)}" alt="${esc(p.title)} ${i+1}" loading="lazy" style="width:100%;height:auto;display:block;cursor:zoom-in">
+        </figure>`
+      ).join('');
+      shots.querySelectorAll('figure img').forEach((img,i) => img.addEventListener('click', () => openLb(i)));
+    }
 
-    const idx = PROJECTS.indexOf(p), prev = PROJECTS[idx-1], next = PROJECTS[idx+1];
+    const idx = ALL_PROJECTS.indexOf(p), prev = ALL_PROJECTS[idx-1], next = ALL_PROJECTS[idx+1];
     const navWrap = document.getElementById('cs-nav');
     const link = (p2,dir) => p2
       ? `<a data-csnav="${esc(p2.id)}" style="cursor:pointer;max-width:46%;text-align:${dir==='next'?'right':'left'}"><span style="display:block;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f4f3ef;opacity:.6;margin-bottom:8px">${dir==='next'?'Next →':'← Previous'}</span><span style="font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:600;font-size:clamp(1.1rem,2.4vw,1.7rem);letter-spacing:-.02em;color:#f4f3ef">${esc(p2.title)}</span></a>`
