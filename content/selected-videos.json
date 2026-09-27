@@ -5,7 +5,7 @@
     "title": "Flooded Street",
     "videoSrc": null,
     "poster": "assets/images/covers/film-01.jpg",
-    "category": "3d",
+    "category": "vfx",
     "embedUrl": "https://www.instagram.com/p/DcIY2EhggKs/embed/"
   },
   {
@@ -14,7 +14,7 @@
     "title": "Skull House",
     "videoSrc": null,
     "poster": "assets/images/covers/film-02.jpg",
-    "category": "3d",
+    "category": "vfx",
     "embedUrl": "https://www.instagram.com/p/DcKkZJyAyDV/embed/"
   },
   {
@@ -23,7 +23,7 @@
     "title": "Rustic Kitchen",
     "videoSrc": null,
     "poster": "assets/images/covers/film-03.jpg",
-    "category": "3d",
+    "category": "vfx",
     "embedUrl": "https://www.instagram.com/p/DcOsp1OAL83/embed/"
   },
   {
@@ -32,7 +32,7 @@
     "title": "The Midnight Escape",
     "videoSrc": null,
     "poster": "assets/images/covers/film-04.jpg",
-    "category": "other",
+    "category": "shorts",
     "embedUrl": "https://www.youtube.com/embed/5uKGF2SZjFM?autoplay=1&rel=0&playsinline=1"
   },
   {
@@ -41,7 +41,7 @@
     "title": "Scribe of Silence",
     "videoSrc": null,
     "poster": "assets/images/covers/film-05.jpg",
-    "category": "ai",
+    "category": "vfx",
     "embedUrl": "https://www.instagram.com/p/DcpC0eUPWOe/embed/"
   },
   {
@@ -50,7 +50,7 @@
     "title": "The Silent Green",
     "videoSrc": null,
     "poster": "assets/images/covers/film-06.jpg",
-    "category": "other",
+    "category": "shorts",
     "embedUrl": "https://www.youtube.com/embed/guuKxslbK7w?autoplay=1&rel=0&playsinline=1"
   },
   {
@@ -59,7 +59,7 @@
     "title": "This Classified Leak Explains Everything",
     "videoSrc": null,
     "poster": "assets/images/covers/film-07.jpg",
-    "category": "other",
+    "category": "shorts",
     "embedUrl": "https://www.youtube.com/embed/p2IAZWta9X4?autoplay=1&rel=0&playsinline=1"
   }
 ]

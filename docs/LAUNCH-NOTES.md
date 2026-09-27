@@ -39,3 +39,9 @@ Existing V1 and V2-approved checkpoints live outside this folder and are unchang
 - Vertical hero, stacked about and work layouts, fluid headings, touch-size filters, and constrained video dialogs including landscape.
 - Reversible depth retained at reduced amplitude on narrow viewports; character scales to a margin-sized companion.
 - Local source only; no copy to GitHub repository or publication performed.
+
+## Work categories
+
+- SHORTS: the three YouTube films. VFX: the four Instagram studies.
+- IMAGES and Other Works have honest empty states until content is added.
+- Larger equal-width controls, a two-by-two phone layout, and interruptible directional transitions. System reduced motion switches categories immediately.
