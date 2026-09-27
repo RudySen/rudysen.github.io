@@ -14,7 +14,7 @@
 - Replace four Instagram sources with the user's forthcoming YouTube uploads. Instagram embed did not support in-page playback in our browser test.
 - Front-page reel is still a placeholder pending the final reel.
 - Review experience wording and final project titles before publication.
-- Desktop is the approved design; dedicated mobile refinement remains a later task.
+- Responsive pass added for phones, tablets, landscape and desktop. Browser viewport checks cover 320–1440 px. Physical iOS/Android playback and text-scaling checks remain before final mobile sign-off.
 
 ## Performance follow-up
 
@@ -31,3 +31,11 @@
 5. Verify all seven video embeds, social links, resume, focus/keyboard controls, and asset paths on the deployed site.
 
 Existing V1 and V2-approved checkpoints live outside this folder and are unchanged.
+
+## Responsive pass — September 27, 2026
+
+- Bundled Anton (SIL Open Font License included) for the heavy mobile title and desktop font fallback; desktop Impact styling retained.
+- Mobile menu with 48 px links, Escape dismissal, and automatic close after navigation.
+- Vertical hero, stacked about and work layouts, fluid headings, touch-size filters, and constrained video dialogs including landscape.
+- Reversible depth retained at reduced amplitude on narrow viewports; character scales to a margin-sized companion.
+- Local source only; no copy to GitHub repository or publication performed.
