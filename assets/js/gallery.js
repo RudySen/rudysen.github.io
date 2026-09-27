@@ -81,7 +81,10 @@
     if (!drag.active) return;
     drag.dx = dx;
     const edge = (index === 0 && dx > 0) || (index === slides.length - 1 && dx < 0);
-    paint(-dx / grid.clientWidth * (edge ? .4 : 1.6));
+    // Match the pointer direction; index advancement moves the stack the same way.
+    // Limit a drag to one slide so a long swipe cannot overshoot its release target.
+    const offset = dx / grid.clientWidth * (edge ? .4 : 1.6);
+    paint(Math.max(-1, Math.min(1, offset)));
   });
   function finish(event) {
     if (!drag || drag.id !== event.pointerId) return;
