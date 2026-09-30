@@ -1,65 +1,155 @@
 [
   {
-    "id": "film-01",
-    "sourceUrl": "https://www.instagram.com/rudysen_official/reel/DcIY2EhggKs/",
-    "title": "Flooded Street",
+    "id": "NtpjyZ_HaoA",
+    "sourceUrl": "https://youtu.be/NtpjyZ_HaoA",
+    "title": "RSBag",
     "videoSrc": null,
-    "poster": "assets/images/covers/film-01.jpg",
-    "category": "vfx",
-    "embedUrl": "https://www.instagram.com/p/DcIY2EhggKs/embed/"
+    "poster": "https://i.ytimg.com/vi/NtpjyZ_HaoA/hqdefault.jpg",
+    "category": "shorts",
+    "embedUrl": "https://www.youtube.com/embed/NtpjyZ_HaoA?autoplay=1&rel=0&playsinline=1"
   },
   {
-    "id": "film-02",
-    "sourceUrl": "https://www.instagram.com/rudysen_official/reel/DcKkZJyAyDV/",
-    "title": "Skull House",
+    "id": "94nHpfTQFWw",
+    "sourceUrl": "https://youtu.be/94nHpfTQFWw",
+    "title": "RIFT",
     "videoSrc": null,
-    "poster": "assets/images/covers/film-02.jpg",
-    "category": "vfx",
-    "embedUrl": "https://www.instagram.com/p/DcKkZJyAyDV/embed/"
+    "poster": "https://i.ytimg.com/vi/94nHpfTQFWw/hqdefault.jpg",
+    "category": "shorts",
+    "embedUrl": "https://www.youtube.com/embed/94nHpfTQFWw?autoplay=1&rel=0&playsinline=1"
   },
   {
-    "id": "film-03",
-    "sourceUrl": "https://www.instagram.com/rudysen_official/reel/DcOsp1OAL83/",
-    "title": "Rustic Kitchen",
+    "id": "HbPPFAWpX3c",
+    "sourceUrl": "https://youtu.be/HbPPFAWpX3c",
+    "title": "LUXURE COURANT",
     "videoSrc": null,
-    "poster": "assets/images/covers/film-03.jpg",
-    "category": "vfx",
-    "embedUrl": "https://www.instagram.com/p/DcOsp1OAL83/embed/"
+    "poster": "https://i.ytimg.com/vi/HbPPFAWpX3c/hqdefault.jpg",
+    "category": "shorts",
+    "embedUrl": "https://www.youtube.com/embed/HbPPFAWpX3c?autoplay=1&rel=0&playsinline=1"
   },
   {
-    "id": "film-04",
-    "sourceUrl": "https://www.youtube.com/embed/5uKGF2SZjFM?rel=0",
+    "id": "XGEy23uiIFc",
+    "sourceUrl": "https://youtu.be/XGEy23uiIFc",
+    "title": "LMBag",
+    "videoSrc": null,
+    "poster": "https://i.ytimg.com/vi/XGEy23uiIFc/hqdefault.jpg",
+    "category": "shorts",
+    "embedUrl": "https://www.youtube.com/embed/XGEy23uiIFc?autoplay=1&rel=0&playsinline=1"
+  },
+  {
+    "id": "5uKGF2SZjFM",
+    "sourceUrl": "https://youtu.be/5uKGF2SZjFM",
     "title": "The Midnight Escape",
     "videoSrc": null,
-    "poster": "assets/images/covers/film-04.jpg",
+    "poster": "https://i.ytimg.com/vi/5uKGF2SZjFM/hqdefault.jpg",
     "category": "shorts",
     "embedUrl": "https://www.youtube.com/embed/5uKGF2SZjFM?autoplay=1&rel=0&playsinline=1"
   },
   {
-    "id": "film-05",
-    "sourceUrl": "https://www.instagram.com/rudysen_official/reel/DcpC0eUPWOe/",
-    "title": "Scribe of Silence",
+    "id": "o8DBu5uuGek",
+    "sourceUrl": "https://youtu.be/o8DBu5uuGek",
+    "title": "Scribe Of Silence",
     "videoSrc": null,
-    "poster": "assets/images/covers/film-05.jpg",
-    "category": "vfx",
-    "embedUrl": "https://www.instagram.com/p/DcpC0eUPWOe/embed/"
+    "poster": "https://i.ytimg.com/vi/o8DBu5uuGek/hqdefault.jpg",
+    "category": "shorts",
+    "embedUrl": "https://www.youtube.com/embed/o8DBu5uuGek?autoplay=1&rel=0&playsinline=1"
   },
   {
-    "id": "film-06",
-    "sourceUrl": "https://www.youtube.com/embed/guuKxslbK7w?rel=0",
+    "id": "guuKxslbK7w",
+    "sourceUrl": "https://youtu.be/guuKxslbK7w",
     "title": "The Silent Green",
     "videoSrc": null,
-    "poster": "assets/images/covers/film-06.jpg",
+    "poster": "https://i.ytimg.com/vi/guuKxslbK7w/hqdefault.jpg",
     "category": "shorts",
     "embedUrl": "https://www.youtube.com/embed/guuKxslbK7w?autoplay=1&rel=0&playsinline=1"
   },
   {
-    "id": "film-07",
-    "sourceUrl": "https://www.youtube.com/embed/p2IAZWta9X4?rel=0",
+    "id": "BzFHfJfNu1M",
+    "sourceUrl": "https://youtu.be/BzFHfJfNu1M",
+    "title": "Smallest Kindness",
+    "videoSrc": null,
+    "poster": "https://i.ytimg.com/vi/BzFHfJfNu1M/hqdefault.jpg",
+    "category": "shorts",
+    "embedUrl": "https://www.youtube.com/embed/BzFHfJfNu1M?autoplay=1&rel=0&playsinline=1"
+  },
+  {
+    "id": "WO_JvfbmwsA",
+    "sourceUrl": "https://youtu.be/WO_JvfbmwsA",
+    "title": "Eternal Ale - Original spec commercial",
+    "videoSrc": null,
+    "poster": "https://i.ytimg.com/vi/WO_JvfbmwsA/hqdefault.jpg",
+    "category": "vfx",
+    "embedUrl": "https://www.youtube.com/embed/WO_JvfbmwsA?autoplay=1&rel=0&playsinline=1"
+  },
+  {
+    "id": "P1_N0ggSEss",
+    "sourceUrl": "https://youtu.be/P1_N0ggSEss",
+    "title": "Drift",
+    "videoSrc": null,
+    "poster": "https://i.ytimg.com/vi/P1_N0ggSEss/hqdefault.jpg",
+    "category": "vfx",
+    "embedUrl": "https://www.youtube.com/embed/P1_N0ggSEss?autoplay=1&rel=0&playsinline=1"
+  },
+  {
+    "id": "9aaJWl24cTw",
+    "sourceUrl": "https://youtu.be/9aaJWl24cTw",
+    "title": "3DWorks",
+    "videoSrc": null,
+    "poster": "https://i.ytimg.com/vi/9aaJWl24cTw/hqdefault.jpg",
+    "category": "vfx",
+    "embedUrl": "https://www.youtube.com/embed/9aaJWl24cTw?autoplay=1&rel=0&playsinline=1"
+  },
+  {
+    "id": "y_W8sWmy1Ac",
+    "sourceUrl": "https://youtu.be/y_W8sWmy1Ac",
+    "title": "Lava - VFX",
+    "videoSrc": null,
+    "poster": "https://i.ytimg.com/vi/y_W8sWmy1Ac/hqdefault.jpg",
+    "category": "vfx",
+    "embedUrl": "https://www.youtube.com/embed/y_W8sWmy1Ac?autoplay=1&rel=0&playsinline=1"
+  },
+  {
+    "id": "wvvTU0N1pzM",
+    "sourceUrl": "https://youtu.be/wvvTU0N1pzM",
+    "title": "GreenScreen",
+    "videoSrc": null,
+    "poster": "https://i.ytimg.com/vi/wvvTU0N1pzM/hqdefault.jpg",
+    "category": "vfx",
+    "embedUrl": "https://www.youtube.com/embed/wvvTU0N1pzM?autoplay=1&rel=0&playsinline=1"
+  },
+  {
+    "id": "8-mnvf_VJ-o",
+    "sourceUrl": "https://youtu.be/8-mnvf_VJ-o",
+    "title": "The Siren's Song: When Charm Becomes Dangerous",
+    "videoSrc": null,
+    "poster": "https://i.ytimg.com/vi/8-mnvf_VJ-o/hqdefault.jpg",
+    "category": "other",
+    "embedUrl": "https://www.youtube.com/embed/8-mnvf_VJ-o?autoplay=1&rel=0&playsinline=1"
+  },
+  {
+    "id": "CVHXr7d2IJE",
+    "sourceUrl": "https://youtu.be/CVHXr7d2IJE",
+    "title": "Jenna alive",
+    "videoSrc": null,
+    "poster": "https://i.ytimg.com/vi/CVHXr7d2IJE/hqdefault.jpg",
+    "category": "other",
+    "embedUrl": "https://www.youtube.com/embed/CVHXr7d2IJE?autoplay=1&rel=0&playsinline=1"
+  },
+  {
+    "id": "p2IAZWta9X4",
+    "sourceUrl": "https://youtu.be/p2IAZWta9X4",
     "title": "This Classified Leak Explains Everything",
     "videoSrc": null,
-    "poster": "assets/images/covers/film-07.jpg",
-    "category": "shorts",
+    "poster": "https://i.ytimg.com/vi/p2IAZWta9X4/hqdefault.jpg",
+    "category": "other",
     "embedUrl": "https://www.youtube.com/embed/p2IAZWta9X4?autoplay=1&rel=0&playsinline=1"
+  },
+  {
+    "id": "KHbJfMUulDs",
+    "sourceUrl": "https://youtu.be/KHbJfMUulDs",
+    "title": "Inside the Forgotten Underground Bunker \u2013 Footage You Shouldn't See",
+    "videoSrc": null,
+    "poster": "https://i.ytimg.com/vi/KHbJfMUulDs/hqdefault.jpg",
+    "category": "other",
+    "embedUrl": "https://www.youtube.com/embed/KHbJfMUulDs?autoplay=1&rel=0&playsinline=1"
   }
 ]

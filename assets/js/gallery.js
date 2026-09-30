@@ -7,7 +7,11 @@
   const caption = document.createElement('p');
   caption.className = 'gallery-caption';
   caption.setAttribute('aria-live', 'polite');
-  grid.after(controls, caption);
+  const strip = document.createElement('div');
+  strip.className = 'gallery-strip';
+  strip.setAttribute('role', 'group');
+  strip.setAttribute('aria-label', 'Choose a video');
+  grid.after(strip, controls, caption);
   const [previous, next] = controls.querySelectorAll('.gallery-arrow');
   const dots = controls.querySelector('.gallery-dots');
   let slides = [], index = 0, drag = null, suppressClick = false;
@@ -41,19 +45,34 @@
     previous.disabled = index === 0;
     next.disabled = index === slides.length - 1;
     [...dots.children].forEach((dot, i) => dot.setAttribute('aria-current', String(i === index)));
+    [...strip.children].forEach((thumb, i) => thumb.setAttribute('aria-current', String(i === index)));
+    const activeThumb = strip.children[index];
+    if (activeThumb) strip.scrollTo({left:activeThumb.offsetLeft - (strip.clientWidth-activeThumb.offsetWidth)/2, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
     caption.textContent = slides.length ? `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')} — ${slides[index].querySelector('h3').textContent}` : '';
   }
   function reset() {
     drag = null;
     grid.classList.remove('is-dragging');
     slides = all.filter(slide => !slide.hidden);
-    grid.hidden = controls.hidden = caption.hidden = !slides.length;
+    grid.hidden = controls.hidden = caption.hidden = strip.hidden = !slides.length;
     dots.replaceChildren();
+    strip.replaceChildren();
     slides.forEach((slide, i) => {
       const dot = document.createElement('button');
       dot.type = 'button'; dot.className = 'gallery-dot';
       dot.setAttribute('aria-label', `Show ${slide.querySelector('h3').textContent}`);
       dot.addEventListener('click', () => go(i)); dots.append(dot);
+      const thumb = document.createElement('button');
+      thumb.type = 'button'; thumb.className = 'gallery-thumb';
+      thumb.setAttribute('aria-label', `${i + 1}. ${slide.querySelector('h3').textContent}`);
+      thumb.title = slide.querySelector('h3').textContent;
+      const image = document.createElement('img');
+      image.src = slide.querySelector('.cover-fallback').src;
+      image.alt = ''; image.loading = 'lazy'; image.draggable = false;
+      const number = document.createElement('span'); number.textContent = String(i + 1).padStart(2, '0');
+      thumb.append(image, number);
+      thumb.addEventListener('click', () => go(i));
+      strip.append(thumb);
     });
     if (slides.length) go(remembered.get(category()) || 0);
   }

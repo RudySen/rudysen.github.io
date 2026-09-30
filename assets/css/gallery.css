@@ -28,3 +28,26 @@
 .work-results{overflow:clip;min-height:0}
 @media(max-width:700px){.project-grid{padding:20px 0 30px}.project-grid article{width:86%}.project-grid .work-link{padding:6px}.project-grid .project-heading{padding:12px 7px;min-height:74px}.project-grid .project-heading h3{font-size:18px}.gallery-controls{gap:8px}.gallery-arrow{width:46px;height:46px}.gallery-dot{width:36px;height:44px;padding:17px 13px}.project-grid .cover-play{width:46px;height:46px;font-size:16px}}
 @media(prefers-reduced-motion:reduce){.project-grid article,.gallery-controls button,.gallery-dot::after{transition:none}}
+
+/* Film contact sheet: all eight shorts fit on desktop; swipe the strip on phones. */
+.filters{grid-template-columns:repeat(3,minmax(0,1fr))}
+.gallery-strip{display:flex;gap:10px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:var(--gold) #ffffff15;padding:8px 3px 15px;margin:0 0 22px;position:relative;scroll-snap-type:x proximity}
+.gallery-strip[hidden]{display:none}
+.gallery-thumb{position:relative;flex:1 0 calc((100% - 70px)/8);min-width:76px;max-width:180px;aspect-ratio:16/10;padding:3px;border:2px solid transparent;background:#ece6d938;cursor:pointer;scroll-snap-align:center;opacity:.65;transition:opacity .2s,border-color .2s,transform .2s}
+.gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.gallery-thumb span{position:absolute;bottom:4px;left:4px;background:#20211ecc;color:var(--paper);font:11px/1.4 'Courier New',monospace;padding:2px 5px}
+.gallery-thumb[aria-current=true]{border-color:var(--gold);opacity:1;transform:translateY(-3px)}
+.gallery-thumb:hover{opacity:1}.gallery-thumb:focus-visible{outline:3px solid var(--paper);outline-offset:2px}
+.reel-player{padding:0;border:0;display:block;width:100%;aspect-ratio:16/9;min-height:0;background:#20211e}
+.reel-player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media(max-width:700px){.filters{gap:8px}.filters button{font-size:14px;padding:12px 5px}.gallery-thumb{flex-basis:92px;min-width:92px}.gallery-strip{gap:8px}.gallery-dots{display:none}.gallery-controls{gap:24px}.reel-player{aspect-ratio:16/9;min-height:0}}
+@media(prefers-reduced-motion:reduce){.gallery-thumb{transition:none}}
+.reel-player iframe{pointer-events:none}
+.reel-controls{display:flex;justify-content:flex-end;gap:12px;margin-top:16px}
+.reel-controls button{min-height:44px;padding:10px 14px;background:transparent;border:1px solid var(--ink);color:var(--ink);font:12px 'Courier New',monospace;cursor:pointer}
+.reel-controls button:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.contact-links{display:flex;flex-direction:column;align-items:flex-start;gap:22px;min-width:0}
+.contact-links .text-link{overflow-wrap:anywhere}
+@media(max-width:700px){.contact-links .text-link{font-size:15px}}
+
+.reel-player video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;background:#20211e}
