@@ -29,3 +29,6 @@ footer{position:absolute;bottom:12px;left:0;width:100%;pointer-events:none;text-
 @media(prefers-reduced-motion:reduce){.tech-scene{transform:none!important;transition:none!important}}
 .tech-heading{top:34%}.build-node{top:2%}.output-node{bottom:21%}@media(max-width:700px){.tech-heading{top:32%}.output-node{bottom:20%}}
 .pencil-note{bottom:2px;line-height:1.1}@media(max-width:700px){.pencil-note{bottom:3px}}
+
+.art-button svg{transform:scaleX(-1)}
+.print-one{width:45%;height:30%}.print-two{width:40%;height:26%;left:-4%}.print-three{width:34%;height:24%;left:10%}
