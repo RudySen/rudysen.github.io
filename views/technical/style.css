@@ -69,3 +69,15 @@ header>.switch{display:none}header .brand{flex-shrink:0}header nav{margin-left:a
 .watch-art-reel{position:relative;z-index:2;margin-top:14px;padding:12px 20px;border:1px solid #86a9df;background:#315f9b;color:#fff;border-radius:6px;cursor:pointer;font:inherit;box-shadow:0 0 22px #315f9b30}.watch-art-reel:hover{background:#3c70b4}.watch-art-reel:focus-visible{outline:2px solid #e2bd55;outline-offset:4px}#project-media video{display:block;width:100%;max-height:65vh;background:#080e10;aspect-ratio:16/9;object-fit:contain}
 
 .output-frame.is-idle{background:#000;border-color:#30383c}.output-frame.is-idle:before,.output-frame.is-idle:after{display:none}.output-frame.is-idle>*{visibility:hidden;pointer-events:none}.watch-art-reel[hidden]{display:none}
+
+/* Groups follow their member bounds but never intercept a canvas gesture. */
+.node-group,.node-group *{pointer-events:none;user-select:none;cursor:inherit}
+@media(pointer:coarse){
+ #world{will-change:auto}
+ .canvas-label,.status,.hint,.toolbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:#152025}
+ #prompt::after,#sampler::after,#output::after,.generate::after{animation:none;background:none;-webkit-mask:none;mask:none;padding:0;border:1px solid var(--rim-color,var(--accent));opacity:.65}
+ .ghost-motion{animation:ghost-pose 5.5s ease-in-out infinite;filter:none}
+ #viewport.dragging .ghost-motion,#viewport.dragging .ghost-blink,#viewport.dragging .scanning-screen:after{animation-play-state:paused}
+ #viewport.dragging .node{transition:none}
+ .running .pulse{filter:none}
+}
